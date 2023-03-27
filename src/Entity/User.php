@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -28,13 +29,18 @@ class User
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=25, nullable=false)
+     * @Assert\NotBlank(message="Remplir ce champ")
+     * 
      */
+
     private $nom;
 
     /**
      * @var string
      *
      * @ORM\Column(name="prenom", type="string", length=25, nullable=false)
+     * @Assert\NotBlank
+     * 
      */
     private $prenom;
 
@@ -42,6 +48,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="adrmail", type="string", length=25, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $adrmail;
 
@@ -49,6 +57,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="mdp", type="string", length=25, nullable=false)
+     * @Assert\NotBlank
+     * 
      */
     private $mdp;
 
@@ -56,6 +66,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="adresse", type="string", length=100, nullable=false)
+     * @Assert\NotBlank
+     * 
      */
     private $adresse;
 
@@ -63,6 +75,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="tel", type="string", length=25, nullable=false)
+     * @Assert\NotBlank
+     * 
      */
     private $tel;
 
@@ -70,6 +84,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=6, nullable=false)
+     * 
      */
     private $type;
 
@@ -77,6 +92,8 @@ class User
      * @var int
      *
      * @ORM\Column(name="cin", type="integer", nullable=false)
+     * @Assert\NotBlank
+     * 
      */
     private $cin;
 
@@ -84,6 +101,7 @@ class User
      * @var int
      *
      * @ORM\Column(name="soldepoint", type="integer", nullable=false)
+     * 
      */
     private $soldepoint;
 

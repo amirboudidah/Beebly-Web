@@ -18,9 +18,7 @@ class UserType extends AbstractType
             ->add('mdp')
             ->add('adresse')
             ->add('tel')
-            ->add('type')
             ->add('cin')
-            ->add('soldepoint')
         ;
     }
 

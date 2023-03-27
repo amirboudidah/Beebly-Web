@@ -8,11 +8,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
                 <th>Prenom</th>
                 <th>Adrmail</th>
-                <th>Mdp</th>
                 <th>Adresse</th>
                 <th>Tel</th>
                 <th>Type</th>
@@ -24,19 +22,16 @@
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
                 <td>{{ user.nom }}</td>
                 <td>{{ user.prenom }}</td>
                 <td>{{ user.adrmail }}</td>
-                <td>{{ user.mdp }}</td>
                 <td>{{ user.adresse }}</td>
                 <td>{{ user.tel }}</td>
                 <td>{{ user.type }}</td>
                 <td>{{ user.cin }}</td>
                 <td>{{ user.soldepoint }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}"><button class="btn btn-warning" >Show</button></a>
                 </td>
             </tr>
         {% else %}
@@ -47,5 +42,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_new') }}">Create new</a>
+    <a href="{{ path('app_user_new') }}"><button class="btn btn-primary" >Create new</button></a>
 {% endblock %}
