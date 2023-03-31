@@ -1,0 +1,9 @@
+# config/packages/swiftmailer.yaml
+swiftmailer:
+    transport: gmail
+    username: 'beeblyinfo@gmail.com'
+    password: 'ojqdadkqhwvefatr'
+    host: 'smtp.gmail.com'
+    port: 465
+    encryption: ssl
+    spool: { type: 'memory' }
