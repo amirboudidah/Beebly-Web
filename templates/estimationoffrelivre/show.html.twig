@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Estimationoffrelivre{% endblock %}
+
+{% block body %}
+    <h1>Estimationoffrelivre</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Idestimationoffrelivre</th>
+                <td>{{ estimationoffrelivre.idestimationoffrelivre }}</td>
+            </tr>
+            <tr>
+                <th>Pointestime</th>
+                <td>{{ estimationoffrelivre.pointestime }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ estimationoffrelivre.etat }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_estimationoffrelivre_index') }}">back to list</a>
+
+    <a href="{{ path('app_estimationoffrelivre_edit', {'idestimationoffrelivre': estimationoffrelivre.idestimationoffrelivre}) }}">edit</a>
+
+    {{ include('estimationoffrelivre/_delete_form.html.twig') }}
+{% endblock %}

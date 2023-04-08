@@ -1,0 +1,11 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}Update profile{% endblock %}
+
+{% block body %}
+
+     <div class="d-flex flex-column justify-content-center">
+     <h1> Profile </h1>
+         {{ include('user/_form.html.twig') }}
+    </div>
+{% endblock %}

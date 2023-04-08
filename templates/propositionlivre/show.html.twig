@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Propositionlivre{% endblock %}
+
+{% block body %}
+    <h1>Propositionlivre</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Idpropositionlivre</th>
+                <td>{{ propositionlivre.idpropositionlivre }}</td>
+            </tr>
+            <tr>
+                <th>Titrelivre</th>
+                <td>{{ propositionlivre.titrelivre }}</td>
+            </tr>
+            <tr>
+                <th>Editon</th>
+                <td>{{ propositionlivre.editon }}</td>
+            </tr>
+            <tr>
+                <th>Dateproposition</th>
+                <td>{{ propositionlivre.dateproposition ? propositionlivre.dateproposition|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Descriptionetat</th>
+                <td>{{ propositionlivre.descriptionetat }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_propositionlivre_index') }}">back to list</a>
+
+    <a href="{{ path('app_propositionlivre_edit', {'idpropositionlivre': propositionlivre.idpropositionlivre}) }}">edit</a>
+
+    {{ include('propositionlivre/_delete_form.html.twig') }}
+{% endblock %}

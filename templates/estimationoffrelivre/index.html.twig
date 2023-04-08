@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Estimationoffrelivre index{% endblock %}
+
+{% block body %}
+    <h1>Estimationoffrelivre index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Idestimationoffrelivre</th>
+                <th>Pointestime</th>
+                <th>Etat</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for estimationoffrelivre in estimationoffrelivres %}
+            <tr>
+                <td>{{ estimationoffrelivre.idestimationoffrelivre }}</td>
+                <td>{{ estimationoffrelivre.pointestime }}</td>
+                <td>{{ estimationoffrelivre.etat }}</td>
+                <td>
+                    <a href="{{ path('app_estimationoffrelivre_show', {'idestimationoffrelivre': estimationoffrelivre.idestimationoffrelivre}) }}">show</a>
+                    <a href="{{ path('app_estimationoffrelivre_edit', {'idestimationoffrelivre': estimationoffrelivre.idestimationoffrelivre}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_estimationoffrelivre_new') }}">Create new</a>
+{% endblock %}

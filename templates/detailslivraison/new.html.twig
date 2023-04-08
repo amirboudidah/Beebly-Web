@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Detailslivraison{% endblock %}
+
+{% block body %}
+    <h1>Create new Detailslivraison</h1>
+
+    {{ include('detailslivraison/_form.html.twig') }}
+
+    <a href="{{ path('app_detailslivraison_index') }}">back to list</a>
+{% endblock %}

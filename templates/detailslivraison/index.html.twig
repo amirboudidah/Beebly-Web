@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detailslivraison index{% endblock %}
+
+{% block body %}
+    <h1>Detailslivraison index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Iddetailslivraison</th>
+                <th>Etatlivrasion</th>
+                <th>Adresselivraison</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for detailslivraison in detailslivraisons %}
+            <tr>
+                <td>{{ detailslivraison.iddetailslivraison }}</td>
+                <td>{{ detailslivraison.etatlivrasion }}</td>
+                <td>{{ detailslivraison.adresselivraison }}</td>
+                <td>
+                    <a href="{{ path('app_detailslivraison_show', {'iddetailslivraison': detailslivraison.iddetailslivraison}) }}">show</a>
+                    <a href="{{ path('app_detailslivraison_edit', {'iddetailslivraison': detailslivraison.iddetailslivraison}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_detailslivraison_new') }}">Create new</a>
+{% endblock %}

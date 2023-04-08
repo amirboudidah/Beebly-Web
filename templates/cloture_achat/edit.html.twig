@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ClotureAchat{% endblock %}
+
+{% block body %}
+    <h1>Edit ClotureAchat</h1>
+
+    {{ include('cloture_achat/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_cloture_achat_index') }}">back to list</a>
+
+    {{ include('cloture_achat/_delete_form.html.twig') }}
+{% endblock %}

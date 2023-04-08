@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Estimationoffrelivre{% endblock %}
+
+{% block body %}
+    <h1>Edit Estimationoffrelivre</h1>
+
+    {{ include('estimationoffrelivre/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_estimationoffrelivre_index') }}">back to list</a>
+
+    {{ include('estimationoffrelivre/_delete_form.html.twig') }}
+{% endblock %}
