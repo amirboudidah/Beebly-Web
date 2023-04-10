@@ -29,7 +29,7 @@ class Propositionlivre
      *
      * @ORM\Column(name="titreLivre", type="string", length=45, nullable=true, options={"default"="NULL"})
      */
-    private $titrelivre = 'NULL';
+    private $titrelivre ;
 
     /**
      * @var string
@@ -41,16 +41,16 @@ class Propositionlivre
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="dateProposition", type="date", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="dateProposition", type="date", nullable=true)
      */
-    private $dateproposition = 'NULL';
+    private $dateproposition ;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="descriptionEtat", type="string", length=45, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="descriptionEtat", type="string", length=300, nullable=true, options={"default"="NULL"})
      */
-    private $descriptionetat = 'NULL';
+    private $descriptionetat ;
 
     /**
      * @var \User

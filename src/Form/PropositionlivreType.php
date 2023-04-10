@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Propositionlivre;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,9 +15,8 @@ class PropositionlivreType extends AbstractType
         $builder
             ->add('titrelivre')
             ->add('editon')
-            ->add('dateproposition')
-            ->add('descriptionetat')
-            ->add('idclient')
+            ->add('descriptionetat',TextareaType::class)
+
         ;
     }
 

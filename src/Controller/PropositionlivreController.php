@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Propositionlivre;
+use App\Entity\User;
 use App\Form\PropositionlivreType;
 use Doctrine\ORM\EntityManagerInterface;
+use  Doctrine\Persistence\ManagerRegistry;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,13 +29,22 @@ class PropositionlivreController extends AbstractController
     }
 
     #[Route('/new', name: 'app_propositionlivre_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
     {
         $propositionlivre = new Propositionlivre();
         $form = $this->createForm(PropositionlivreType::class, $propositionlivre);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $c = $doctrine
+                ->getRepository(User::class)
+                ->find(1);
+            $current_date = date('Y-m-d');
+            $date_object = DateTime::createFromFormat('Y-m-d', $current_date);
+
+            $propositionlivre->setIdclient($c);
+            $propositionlivre->setDateproposition($date_object);
             $entityManager->persist($propositionlivre);
             $entityManager->flush();
 
