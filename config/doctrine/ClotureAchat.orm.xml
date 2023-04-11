@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\ClotureAchat" table="cloture_achat">
+    <indexes>
+      <index name="foreign_idx" columns="id_details_livraison"/>
+    </indexes>
+    <id name="idCloture" type="integer" column="id_cloture">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="pointachatfinale" type="integer" column="pointAchatFinale" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="etatcloture" type="string" column="etatCloture" length="45" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="default">NULL</option>
+      </options>
+    </field>
+    <field name="etatlivre" type="string" column="etatLivre" length="45" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="default">NULL</option>
+      </options>
+    </field>
+    <many-to-one field="idDetailsLivraison" target-entity="Detailslivraison" fetch="LAZY">
+      <join-columns>
+        <join-column name="id_details_livraison" referenced-column-name="idDetailsLivraison"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

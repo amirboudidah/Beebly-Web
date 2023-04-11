@@ -25,83 +25,52 @@ class User
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=25, nullable=false)
-     * @Assert\NotBlank(message="Remplir ce champ")
-     * 
+ /**
+     * @Assert\NotBlank(message="The name field is required.")
+     * @Assert\Length(max=25, maxMessage="The name field cannot exceed {{ limit }} characters.")
      */
-
     private $nom;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="prenom", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * 
+     * @Assert\NotBlank(message="The first name field is required.")
+     * @Assert\Length(max=25, maxMessage="The first name field cannot exceed {{ limit }} characters.")
      */
     private $prenom;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="adrmail", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * @Assert\Email
+     * @Assert\NotBlank(message="The email field is required.")
+     * @Assert\Email(message="The email '{{ value }}' is not a valid email address.")
      */
     private $adrmail;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="mdp", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * 
+     * @Assert\NotBlank(message="The password field is required.")
+     * @Assert\Length(max=25, maxMessage="The password field cannot exceed {{ limit }} characters.")
      */
     private $mdp;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="adresse", type="string", length=100, nullable=false)
-     * @Assert\NotBlank
-     * 
+     * @Assert\NotBlank(message="The address field is required.")
+     * @Assert\Length(max=100, maxMessage="The address field cannot exceed {{ limit }} characters.")
      */
     private $adresse;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="tel", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * 
+     * @Assert\NotBlank(message="The phone number field is required.")
+     * @Assert\Length(max=25, maxMessage="The phone number field cannot exceed {{ limit }} characters.")
      */
     private $tel;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=6, nullable=false)
-     * 
      */
     private $type;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="cin", type="integer", nullable=false)
-     * @Assert\NotBlank
-     * 
+     * @Assert\NotBlank(message="The CIN field is required.")
      */
     private $cin;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="soldepoint", type="integer", nullable=false)
-     * 
      */
     private $soldepoint;
 
@@ -217,6 +186,9 @@ class User
 
         return $this;
     }
-
+    public function __toString(): string
+    {
+        return $this->id;
+    }
 
 }

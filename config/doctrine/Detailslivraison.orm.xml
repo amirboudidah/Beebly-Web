@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Detailslivraison" table="detailslivraison">
+    <indexes>
+      <index name="fore_idx" columns="idEstimationOffreLivre"/>
+    </indexes>
+    <id name="iddetailslivraison" type="integer" column="idDetailsLivraison">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="etatlivrasion" type="string" column="etatLivrasion" length="45" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="default">NULL</option>
+      </options>
+    </field>
+    <field name="adresselivraison" type="string" column="AdresseLivraison" length="45" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="default">NULL</option>
+      </options>
+    </field>
+    <many-to-one field="idestimationoffrelivre" target-entity="Estimationoffrelivre" fetch="LAZY">
+      <join-columns>
+        <join-column name="idEstimationOffreLivre" referenced-column-name="idEstimationOffreLivre"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

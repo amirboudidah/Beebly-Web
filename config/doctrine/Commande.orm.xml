@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Commande" table="commande">
+    <indexes>
+      <index name="idc" columns="idClient"/>
+    </indexes>
+    <id name="idcommande" type="integer" column="idCommande">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="idclient" type="integer" column="idClient" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="adresselivraison" type="string" column="adresselivraison" length="255" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="etatcommande" type="string" column="etatcommande" length="0" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="prix" type="float" column="prix" precision="10" scale="0" nullable="false"/>
+  </entity>
+</doctrine-mapping>

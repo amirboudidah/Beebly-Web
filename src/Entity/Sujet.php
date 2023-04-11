@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Sujet
  *
- * @ORM\Table(name="sujet", indexes={@ORM\Index(name="idsujtopic", columns={"idtopic"}), @ORM\Index(name="idcsujet", columns={"iduser"})})
+ * @ORM\Table(name="sujet", indexes={@ORM\Index(name="idcsujet", columns={"iduser"}), @ORM\Index(name="idsujtopic", columns={"idtopic"})})
  * @ORM\Entity
  */
 class Sujet
@@ -58,16 +58,6 @@ class Sujet
     private $nbcom;
 
     /**
-     * @var \Topic
-     *
-     * @ORM\ManyToOne(targetEntity="Topic")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idtopic", referencedColumnName="idtopic")
-     * })
-     */
-    private $idtopic;
-
-    /**
      * @var \User
      *
      * @ORM\ManyToOne(targetEntity="User")
@@ -76,6 +66,16 @@ class Sujet
      * })
      */
     private $iduser;
+
+    /**
+     * @var \Topic
+     *
+     * @ORM\ManyToOne(targetEntity="Topic")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idtopic", referencedColumnName="idtopic")
+     * })
+     */
+    private $idtopic;
 
     public function getIdsujet(): ?int
     {
@@ -142,18 +142,6 @@ class Sujet
         return $this;
     }
 
-    public function getIdtopic(): ?Topic
-    {
-        return $this->idtopic;
-    }
-
-    public function setIdtopic(?Topic $idtopic): self
-    {
-        $this->idtopic = $idtopic;
-
-        return $this;
-    }
-
     public function getIduser(): ?User
     {
         return $this->iduser;
@@ -162,6 +150,18 @@ class Sujet
     public function setIduser(?User $iduser): self
     {
         $this->iduser = $iduser;
+
+        return $this;
+    }
+
+    public function getIdtopic(): ?Topic
+    {
+        return $this->idtopic;
+    }
+
+    public function setIdtopic(?Topic $idtopic): self
+    {
+        $this->idtopic = $idtopic;
 
         return $this;
     }

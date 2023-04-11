@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Commentaire
  *
- * @ORM\Table(name="commentaire", indexes={@ORM\Index(name="idsujcom", columns={"idsujet"}), @ORM\Index(name="idccom", columns={"iduser"})})
+ * @ORM\Table(name="commentaire", indexes={@ORM\Index(name="idccom", columns={"iduser"}), @ORM\Index(name="idsujcom", columns={"idsujet"})})
  * @ORM\Entity
  */
 class Commentaire
@@ -41,24 +41,14 @@ class Commentaire
      *
      * @ORM\Column(name="nblike", type="integer", nullable=false)
      */
-    private $nblike = '0';
+    private $nblike;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nbdislike", type="integer", nullable=false)
      */
-    private $nbdislike = '0';
-
-    /**
-     * @var \Sujet
-     *
-     * @ORM\ManyToOne(targetEntity="Sujet")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idsujet", referencedColumnName="idsujet")
-     * })
-     */
-    private $idsujet;
+    private $nbdislike;
 
     /**
      * @var \User
@@ -69,6 +59,16 @@ class Commentaire
      * })
      */
     private $iduser;
+
+    /**
+     * @var \Sujet
+     *
+     * @ORM\ManyToOne(targetEntity="Sujet")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idsujet", referencedColumnName="idsujet")
+     * })
+     */
+    private $idsujet;
 
     public function getIdcom(): ?int
     {
@@ -123,18 +123,6 @@ class Commentaire
         return $this;
     }
 
-    public function getIdsujet(): ?Sujet
-    {
-        return $this->idsujet;
-    }
-
-    public function setIdsujet(?Sujet $idsujet): self
-    {
-        $this->idsujet = $idsujet;
-
-        return $this;
-    }
-
     public function getIduser(): ?User
     {
         return $this->iduser;
@@ -143,6 +131,18 @@ class Commentaire
     public function setIduser(?User $iduser): self
     {
         $this->iduser = $iduser;
+
+        return $this;
+    }
+
+    public function getIdsujet(): ?Sujet
+    {
+        return $this->idsujet;
+    }
+
+    public function setIdsujet(?Sujet $idsujet): self
+    {
+        $this->idsujet = $idsujet;
 
         return $this;
     }

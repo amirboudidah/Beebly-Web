@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Commentaire" table="commentaire">
+    <indexes>
+      <index name="idccom" columns="iduser"/>
+      <index name="idsujcom" columns="idsujet"/>
+    </indexes>
+    <id name="idcom" type="integer" column="idcom">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="contenu" type="text" column="contenu" length="65535" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="date" type="date" column="date" nullable="false"/>
+    <field name="nblike" type="integer" column="nblike" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="nbdislike" type="integer" column="nbdislike" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <many-to-one field="iduser" target-entity="User" fetch="LAZY">
+      <join-columns>
+        <join-column name="iduser" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="idsujet" target-entity="Sujet" fetch="LAZY">
+      <join-columns>
+        <join-column name="idsujet" referenced-column-name="idsujet"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

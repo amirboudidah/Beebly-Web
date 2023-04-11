@@ -23,10 +23,11 @@ class UserController extends AbstractController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager,Request $request,SessionInterface $session): Response
     {
-        
+        if($session!=null)
+        {
         $id =$session->get('id');
-
-        $user = $entityManager
+        if ($id!= null){
+            $user = $entityManager
             ->getRepository(User::class)->find($id);
             if ($user->getType()=='admin'){
                 $users = $entityManager
@@ -36,16 +37,22 @@ class UserController extends AbstractController
             return $this->render('user/index.html.twig', [
                 'users' => $users,
             ]);
-            }else{
+            }
+        }
+        else{
                 return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
 
             }
+
+        }
      
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
+        if($session!=null)
+        {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -63,19 +70,25 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+        }
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user,SessionInterface $session): Response
     {
+        if($session!=null)
+        {
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
+        }
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
+        if($session!=null)
+        {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -89,11 +102,14 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+        }
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
+        if($session!=null)
+        {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
@@ -101,9 +117,11 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+    }
     #[Route('/front/signin', name: 'app_user_signin', methods: ['GET', 'POST'])]
     public function signin(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
+        
 
         $user = new SignIn();
         $form = $this->createForm(SignInType::class, $user);
@@ -121,7 +139,7 @@ class UserController extends AbstractController
     
                 }else if ($connectedUser->getType()=='client'){
                     //TODO Change when front end integrated
-                    return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+                    return $this->redirectToRoute('app_user_profilefront', [], Response::HTTP_SEE_OTHER);
                 };
             }
 
@@ -133,25 +151,29 @@ class UserController extends AbstractController
     }
 
     #[Route('/front/signup', name: 'app_user_signup', methods: ['GET', 'POST'])]
-    public function signup(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+    public function signup(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
+    {        if($session!=null)
+        {
+$user = new User();
+$form = $this->createForm(UserType::class, $user);
+$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-           
-            $user->setType("client");
-            $user->setSoldepoint(0);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $transport = (new EsmtpTransport('smtp.gmail.com', 587))
+if ($form->isSubmitted() && $form->isValid()) {
+
+
+    if ($user==null) {
+        $user->setType("client");
+        $user->setSoldepoint(0);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $transport = (new EsmtpTransport('smtp.gmail.com', 587))
             ->setUsername('beeblyinfo@gmail.com')
             ->setPassword('ojqdadkqhwvefatr');
-        
+
         // Create the Mailer instance
         $mailer = new Mailer($transport);
-        
+
         // Create the email
         $email = (new Email())
             ->from('beeblyinfo@gmail.com')
@@ -159,21 +181,25 @@ class UserController extends AbstractController
             ->subject('Subject of the email')
             ->text('Plain text content of the email')
             ->html('<p>HTML content of the email</p>');
+
         // Send the email
         $mailer->send($email);
 
-            return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
-
-        }
-
+        return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
+    } else {
+        $this->addFlash('warning', 'This email is already in use.');
+    }
+}  
         return $this->renderForm('user/signup.html.twig', [
             'form' => $form,
         ]);
     }
+    }
 
     #[Route('/back/profile', name: 'app_user_profile', methods: ['GET', 'POST'])]
-    public function profile(Request $request, EntityManagerInterface $entityManager,SessionInterface $session,MailerInterface $mailer): Response
-    {
+    public function profile(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
+    {        if($session!=null)
+        {
         //TODO NJIB LUSER
         $user = new User();
         $id = $session->get('id');
@@ -198,10 +224,12 @@ class UserController extends AbstractController
             'form' => $form,
         ]);
     }
+    }
 
     #[Route('/back/deleteAccount', name: 'app_user_deleteAccount', methods: ['GET', 'POST'])]
     public function deleteAccount(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
-    {
+    {        if($session!=null)
+        {
         $id = $session->get('id');
         $user = $entityManager
         ->getRepository(User::class)->find($id);
@@ -212,7 +240,7 @@ class UserController extends AbstractController
             
             return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
       
-
+        }
        
     }
 
@@ -228,4 +256,46 @@ class UserController extends AbstractController
 
         return new Response('Email sent!');
     }
+
+    #[Route('/log/out', name: 'app_user_logout', methods: ['GET', 'POST'])]
+    public function logout(Request $request, EntityManagerInterface $entityManager,SessionInterface $session)
+    {
+        if($session!=null)
+        {
+            $session=null;
+            return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
+      
+        }
+    }
+
+    #[Route('/front/profile', name: 'app_user_profilefront', methods: ['GET', 'POST'])]
+    public function profileFront(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
+    {
+        if($session!=null)
+        {
+        //TODO NJIB LUSER
+        $user = new User();
+        $id = $session->get('id');
+        $user = $entityManager
+        ->getRepository(User::class)->find($id);
+        
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($user);
+            $entityManager->flush();
+         
+
+         
+
+            return $this->redirectToRoute('app_user_profilefront', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('user/profileFront.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
+}
 }

@@ -27,7 +27,7 @@
          <tr>
     <td>{{form_label(form.mdp,"mdp")}}</td>
     
-    <td>{{form_widget(form.mdp,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    <td>{{ form_widget(form.mdp, {'attr': {'class': 'form-control my-2', 'type': 'password'}}) }}</td>
     
     <td>{{form_errors(form.mdp)}}</td>
    </tr>

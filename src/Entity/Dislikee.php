@@ -22,16 +22,6 @@ class Dislikee
     private $idDislike;
 
     /**
-     * @var \Commentaire
-     *
-     * @ORM\ManyToOne(targetEntity="Commentaire")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_commentaire", referencedColumnName="idcom")
-     * })
-     */
-    private $idCommentaire;
-
-    /**
      * @var \User
      *
      * @ORM\ManyToOne(targetEntity="User")
@@ -41,21 +31,19 @@ class Dislikee
      */
     private $idUser;
 
+    /**
+     * @var \Commentaire
+     *
+     * @ORM\ManyToOne(targetEntity="Commentaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_commentaire", referencedColumnName="idcom")
+     * })
+     */
+    private $idCommentaire;
+
     public function getIdDislike(): ?int
     {
         return $this->idDislike;
-    }
-
-    public function getIdCommentaire(): ?Commentaire
-    {
-        return $this->idCommentaire;
-    }
-
-    public function setIdCommentaire(?Commentaire $idCommentaire): self
-    {
-        $this->idCommentaire = $idCommentaire;
-
-        return $this;
     }
 
     public function getIdUser(): ?User
@@ -66,6 +54,18 @@ class Dislikee
     public function setIdUser(?User $idUser): self
     {
         $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    public function getIdCommentaire(): ?Commentaire
+    {
+        return $this->idCommentaire;
+    }
+
+    public function setIdCommentaire(?Commentaire $idCommentaire): self
+    {
+        $this->idCommentaire = $idCommentaire;
 
         return $this;
     }

@@ -22,16 +22,6 @@ class Likee
     private $idLike;
 
     /**
-     * @var \User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
-     * })
-     */
-    private $idUser;
-
-    /**
      * @var \Commentaire
      *
      * @ORM\ManyToOne(targetEntity="Commentaire")
@@ -41,21 +31,19 @@ class Likee
      */
     private $idCommentaire;
 
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
+     * })
+     */
+    private $idUser;
+
     public function getIdLike(): ?int
     {
         return $this->idLike;
-    }
-
-    public function getIdUser(): ?User
-    {
-        return $this->idUser;
-    }
-
-    public function setIdUser(?User $idUser): self
-    {
-        $this->idUser = $idUser;
-
-        return $this;
     }
 
     public function getIdCommentaire(): ?Commentaire
@@ -66,6 +54,18 @@ class Likee
     public function setIdCommentaire(?Commentaire $idCommentaire): self
     {
         $this->idCommentaire = $idCommentaire;
+
+        return $this;
+    }
+
+    public function getIdUser(): ?User
+    {
+        return $this->idUser;
+    }
+
+    public function setIdUser(?User $idUser): self
+    {
+        $this->idUser = $idUser;
 
         return $this;
     }

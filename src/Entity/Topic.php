@@ -39,30 +39,30 @@ class Topic
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="date", type="date", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="date", type="date", nullable=true)
      */
-    private $date = 'NULL';
+    private $date;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="accepter", type="boolean", nullable=false)
      */
-    private $accepter = '0';
+    private $accepter;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nbsujet", type="integer", nullable=false)
      */
-    private $nbsujet = '0';
+    private $nbsujet;
 
     /**
      * @var int
      *
      * @ORM\Column(name="hide", type="integer", nullable=false)
      */
-    private $hide = '0';
+    private $hide;
 
     /**
      * @var \User

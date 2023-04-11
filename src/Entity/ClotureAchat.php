@@ -24,9 +24,9 @@ class ClotureAchat
     /**
      * @var int|null
      *
-     * @ORM\Column(name="pointAchatFinale", type="integer", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="pointAchatFinale", type="integer", nullable=true)
      */
-    private $pointachatfinale = NULL;
+    private $pointachatfinale;
 
     /**
      * @var string|null

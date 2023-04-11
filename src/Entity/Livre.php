@@ -39,9 +39,9 @@ class Livre
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="datePublication", type="datetime", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="datePublication", type="datetime", nullable=true)
      */
-    private $datepublication = 'NULL';
+    private $datepublication;
 
     /**
      * @var string|null

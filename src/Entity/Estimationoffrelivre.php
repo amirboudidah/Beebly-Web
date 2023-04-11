@@ -24,9 +24,9 @@ class Estimationoffrelivre
     /**
      * @var int|null
      *
-     * @ORM\Column(name="pointEstime", type="integer", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="pointEstime", type="integer", nullable=true)
      */
-    private $pointestime = NULL;
+    private $pointestime;
 
     /**
      * @var string|null

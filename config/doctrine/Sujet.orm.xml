@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Sujet" table="sujet">
+    <indexes>
+      <index name="idcsujet" columns="iduser"/>
+      <index name="idsujtopic" columns="idtopic"/>
+    </indexes>
+    <id name="idsujet" type="integer" column="idsujet">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="titresujet" type="string" column="titresujet" length="255" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="contenu" type="text" column="contenu" length="65535" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="date" type="date" column="date" nullable="false"/>
+    <field name="accepter" type="integer" column="accepter" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="nbcom" type="integer" column="nbcom" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <many-to-one field="iduser" target-entity="User" fetch="LAZY">
+      <join-columns>
+        <join-column name="iduser" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="idtopic" target-entity="Topic" fetch="LAZY">
+      <join-columns>
+        <join-column name="idtopic" referenced-column-name="idtopic"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

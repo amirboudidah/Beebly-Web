@@ -39,9 +39,9 @@ class Propositionlivre
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="dateProposition", type="date", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="dateProposition", type="date", nullable=true)
      */
-    private $dateproposition = 'NULL';
+    private $dateproposition;
 
     /**
      * @var string|null

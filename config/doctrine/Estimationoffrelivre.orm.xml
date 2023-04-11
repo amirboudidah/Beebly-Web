@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Estimationoffrelivre" table="estimationoffrelivre">
+    <indexes>
+      <index name="for_idx" columns="idProposition"/>
+    </indexes>
+    <id name="idestimationoffrelivre" type="integer" column="idEstimationOffreLivre">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="pointestime" type="integer" column="pointEstime" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="etat" type="string" column="etat" length="45" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="default">NULL</option>
+      </options>
+    </field>
+    <many-to-one field="idproposition" target-entity="Propositionlivre" fetch="LAZY">
+      <join-columns>
+        <join-column name="idProposition" referenced-column-name="idPropositionLivre"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
