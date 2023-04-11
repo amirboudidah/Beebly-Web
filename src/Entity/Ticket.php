@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Ticket
  *
@@ -25,6 +25,7 @@ class Ticket
      * @var int
      *
      * @ORM\Column(name="prix", type="integer", nullable=false)
+     * @Assert\GreaterThanOrEqual(0)
      */
     private $prix;
 
@@ -32,6 +33,18 @@ class Ticket
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Remplir ce champ")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
     private $type;
 

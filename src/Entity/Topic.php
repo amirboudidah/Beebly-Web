@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Topic
  *
@@ -25,23 +27,51 @@ class Topic
     /**
      * @var string|null
      *
-     * @ORM\Column(name="titretopic", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="titretopic", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Remplir ce champ")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
-    private $titretopic = 'NULL';
+    private $titretopic;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Remplir ce champ")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
-    private $description = 'NULL';
+    private $description ;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="date", type="date", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="date", type="date", nullable=true)
+     * @Assert\GreaterThanOrEqual(
+     *      value = "today",
+     *      message = "The date should be equal or greater than today"
+     * )
      */
-    private $date = 'NULL';
+    private $date ;
 
     /**
      * @var bool
