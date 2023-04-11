@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\EstimationoffrelivreRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -28,15 +29,19 @@ class Estimationoffrelivre
      * @var int|null
      *
      * @ORM\Column(name="pointEstime", type="integer", nullable=true, options={"default"="NULL"})
+     *
+     * @Assert\NotBlank
+     * @Assert\Type(type="numeric")
+     * @Assert\GreaterThan(value=0, message="Les points doit être supérieur à {{ compared_value }}.")
      */
-    private $pointestime = NULL;
+    private $pointestime;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="etat", type="string", length=45, nullable=true, options={"default"="NULL"})
      */
-    private $etat = 'NULL';
+    private $etat;
 
     /**
      * @var \Propositionlivre

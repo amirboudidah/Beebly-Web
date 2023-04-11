@@ -85,8 +85,10 @@ class DetailslivraisonController extends AbstractController
         return $this->renderForm('detailslivraison/edit.html.twig', [
             'detailslivraison' => $detailslivraison,
             'form' => $form,
+
         ]);
     }
+
 
     #[Route('/{iddetailslivraison}', name: 'app_detailslivraison_delete', methods: ['POST'])]
     public function delete(Request $request, Detailslivraison $detailslivraison, DetailslivraisonRepository $detailslivraisonRepository): Response

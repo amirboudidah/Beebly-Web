@@ -4,6 +4,8 @@ namespace App\Entity;
 use App\Repository\DetailslivraisonRepository;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Detailslivraison
@@ -34,6 +36,13 @@ class Detailslivraison
      * @var string|null
      *
      * @ORM\Column(name="AdresseLivraison", type="string", length=45, nullable=true, options={"default"="NULL"})
+     *
+     * @Assert\NotBlank(message="L'adresse ne peut pas être vide")
+     * @Assert\Length(
+     *     max=45,
+     *     maxMessage="L'adresse ne peut pas dépasser {{ limit }} caractères",
+     *     min=6,
+     *     minMessage="L'adresse doit etre supperiere a 4 caractére ")
      */
     private $adresselivraison ;
 
