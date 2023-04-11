@@ -12,9 +12,8 @@ class DetailslivraisonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('etatlivrasion')
+
             ->add('adresselivraison')
-            ->add('idestimationoffrelivre')
         ;
     }
 

@@ -15,7 +15,7 @@ class ClotureAchatType extends AbstractType
             ->add('pointachatfinale')
             ->add('etatcloture')
             ->add('etatlivre')
-            ->add('idDetailsLivraison')
+
         ;
     }
 

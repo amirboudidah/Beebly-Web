@@ -13,8 +13,7 @@ class EstimationoffrelivreType extends AbstractType
     {
         $builder
             ->add('pointestime')
-            ->add('etat')
-            ->add('idproposition')
+
         ;
     }
 

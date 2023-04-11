@@ -28,14 +28,14 @@ class Detailslivraison
      *
      * @ORM\Column(name="etatLivrasion", type="string", length=45, nullable=true, options={"default"="NULL"})
      */
-    private $etatlivrasion = 'NULL';
+    private $etatlivrasion ;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="AdresseLivraison", type="string", length=45, nullable=true, options={"default"="NULL"})
      */
-    private $adresselivraison = 'NULL';
+    private $adresselivraison ;
 
     /**
      * @var \Estimationoffrelivre
@@ -86,6 +86,11 @@ class Detailslivraison
         $this->idestimationoffrelivre = $idestimationoffrelivre;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->iddetailslivraison;
     }
 
 

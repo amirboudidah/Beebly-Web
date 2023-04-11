@@ -1,4 +1,5 @@
-{% extends 'base.html.twig' %}
+{% extends 'templateFront.html.twig' %}
+
 
 {% block title %}Propositionlivre{% endblock %}
 
@@ -27,16 +28,13 @@
                 <th>Descriptionetat</th>
                 <td>{{ propositionlivre.descriptionetat }}</td>
             </tr>
-            <tr>
-                <th>User</th>
-                <td>{{ propositionlivre.idclient.nom }}</td>
-            </tr>
+
         </tbody>
     </table>
 
-    <a href="{{ path('app_propositionlivre_index') }}">back to list</a>
+    <a href="{{ path('show_my_propositions') }}">back to list</a>
 
-    <a href="{{ path('app_estimationoffrelivre_new', {'idpropositionlivre': propositionlivre.idpropositionlivre}) }}">Proposer une estimation</a>
+    <a href="{{ path('app_propositionlivre_edit', {'idpropositionlivre': propositionlivre.idpropositionlivre}) }}">edit</a>
 
     {{ include('propositionlivre/_delete_form.html.twig') }}
 {% endblock %}

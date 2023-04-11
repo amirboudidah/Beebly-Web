@@ -1,13 +1,51 @@
-{% extends 'base.html.twig' %}
+{% extends 'templateFront.html.twig' %}
 
 {% block title %}Edit Detailslivraison{% endblock %}
 
 {% block body %}
     <h1>Edit Detailslivraison</h1>
 
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Titre livre</th>
+            <td>{{ detailslivraison.idestimationoffrelivre.idproposition.titrelivre }}</td>
+        </tr>
+        <tr>
+            <th>Editon</th>
+            <td>{{ detailslivraison.idestimationoffrelivre.idproposition.editon }}</td>
+        </tr>
+        <tr>
+            <th>Date proposition</th>
+            <td>{{ detailslivraison.idestimationoffrelivre.idproposition.dateproposition ? detailslivraison.idestimationoffrelivre.idproposition.dateproposition|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Description etat</th>
+            <td>{{ detailslivraison.idestimationoffrelivre.idproposition.descriptionetat }}</td>
+        </tr>
+
+
+        <tr>
+            <th>Pointestime</th>
+            <td>{{ detailslivraison.idestimationoffrelivre.pointestime }}</td>
+        </tr>
+        <tr>
+            <th>Etat</th>
+            <td>{{ detailslivraison.idestimationoffrelivre.etat }}</td>
+        </tr>
+        <tr>
+            <th>Etatlivrasion</th>
+            <td>{{ detailslivraison.etatlivrasion }}</td>
+        </tr>
+        <tr>
+            <th>Adresselivraison</th>
+            <td>{{ detailslivraison.adresselivraison }}</td>
+        </tr>
+        </tbody>
+    </table>
     {{ include('detailslivraison/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_detailslivraison_index') }}">back to list</a>
+    <a href="{{ path('mesLivraisons') }}">back to list</a>
 
     {{ include('detailslivraison/_delete_form.html.twig') }}
 {% endblock %}

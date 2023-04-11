@@ -28,6 +28,20 @@ class PropositionlivreController extends AbstractController
         ]);
     }
 
+    #[Route('/mespropositions', name: 'show_my_propositions', methods: ['GET'])]
+    public function mesPropositions(EntityManagerInterface $entityManager): Response
+    {
+        $propositionlivres = $entityManager
+            ->getRepository(Propositionlivre::class)
+            ->findBy(
+                ['idclient' => 1]
+            );
+
+        return $this->render('propositionlivre/show_my_propositions.html.twig', [
+            'propositionlivres' => $propositionlivres,
+        ]);
+    }
+
     #[Route('/new', name: 'app_propositionlivre_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
     {
@@ -48,7 +62,7 @@ class PropositionlivreController extends AbstractController
             $entityManager->persist($propositionlivre);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_propositionlivre_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('show_my_propositions', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('propositionlivre/new.html.twig', [
@@ -91,6 +105,22 @@ class PropositionlivreController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_propositionlivre_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('show_my_propositions', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+    #[Route('/{idpropositionlivre}/showMyProposition', name: 'app_propositionlivre_show_my_proposition', methods: ['GET'])]
+    public function showMyProposition(Propositionlivre $propositionlivre): Response
+    {
+        return $this->render('propositionlivre/show_details_of_my_proposition.html.twig', [
+            'propositionlivre' => $propositionlivre,
+        ]);
+    }
+
+
+
+
 }
+
+

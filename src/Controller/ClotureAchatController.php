@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ClotureAchat;
+use App\Entity\Detailslivraison;
 use App\Form\ClotureAchatType;
 use App\Repository\ClotureAchatRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,14 +22,15 @@ class ClotureAchatController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_cloture_achat_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ClotureAchatRepository $clotureAchatRepository): Response
+    #[Route('/{iddetailslivraison}/new', name: 'app_cloture_achat_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, ClotureAchatRepository $clotureAchatRepository,Detailslivraison $iddetailslivraison): Response
     {
         $clotureAchat = new ClotureAchat();
         $form = $this->createForm(ClotureAchatType::class, $clotureAchat);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $clotureAchat->setIdDetailsLivraison($iddetailslivraison);
             $clotureAchatRepository->save($clotureAchat, true);
 
             return $this->redirectToRoute('app_cloture_achat_index', [], Response::HTTP_SEE_OTHER);
@@ -36,7 +38,7 @@ class ClotureAchatController extends AbstractController
 
         return $this->renderForm('cloture_achat/new.html.twig', [
             'cloture_achat' => $clotureAchat,
-            'form' => $form,
+            'form' => $form,'iddetailslivraison'=>$iddetailslivraison
         ]);
     }
 

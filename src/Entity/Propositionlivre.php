@@ -127,5 +127,8 @@ class Propositionlivre
         return $this;
     }
 
-
+    public function __toString(): string
+    {
+        return $this->idpropositionlivre;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Estimationoffrelivre;
+use App\Entity\Propositionlivre;
 use App\Form\EstimationoffrelivreType;
 use App\Repository\EstimationoffrelivreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,15 +21,29 @@ class EstimationoffrelivreController extends AbstractController
             'estimationoffrelivres' => $estimationoffrelivreRepository->findAll(),
         ]);
     }
+    #[Route('/mesoffres', name: 'mes_offres', methods: ['GET'])]
+    public function mesoffres(EstimationoffrelivreRepository $estimationoffrelivreRepository): Response
+    {
 
-    #[Route('/new', name: 'app_estimationoffrelivre_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EstimationoffrelivreRepository $estimationoffrelivreRepository): Response
+        return $this->render('estimationoffrelivre/show_my_estimations.html.twig', [
+            'estimationoffrelivres' => $estimationoffrelivreRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/{idpropositionlivre}/new', name: 'app_estimationoffrelivre_new', methods: ['GET', 'POST'])]
+    public function new(Request $request,Propositionlivre $propositionlivre,
+                        EstimationoffrelivreRepository $estimationoffrelivreRepository): Response
+
     {
         $estimationoffrelivre = new Estimationoffrelivre();
         $form = $this->createForm(EstimationoffrelivreType::class, $estimationoffrelivre);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $estimationoffrelivre->setIdproposition($propositionlivre);
+            $estimationoffrelivre->setEtat('En_attente');
+
+
             $estimationoffrelivreRepository->save($estimationoffrelivre, true);
 
             return $this->redirectToRoute('app_estimationoffrelivre_index', [], Response::HTTP_SEE_OTHER);
@@ -36,7 +51,14 @@ class EstimationoffrelivreController extends AbstractController
 
         return $this->renderForm('estimationoffrelivre/new.html.twig', [
             'estimationoffrelivre' => $estimationoffrelivre,
-            'form' => $form,
+            'form' => $form,'propositionlivre' => $propositionlivre
+        ]);
+    }
+    #[Route('/{idestimationoffrelivre}/myEstimation', name: 'myEstimation', methods: ['GET'])]
+    public function myEstimation(Estimationoffrelivre $estimationoffrelivre): Response
+    {
+        return $this->render('estimationoffrelivre/show_details_of_my_estimation.html.twig', [
+            'estimationoffrelivre' => $estimationoffrelivre,
         ]);
     }
 
@@ -75,4 +97,7 @@ class EstimationoffrelivreController extends AbstractController
 
         return $this->redirectToRoute('app_estimationoffrelivre_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
 }

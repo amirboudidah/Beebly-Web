@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'templateFront.html.twig' %}
 
 {% block title %}Estimationoffrelivre index{% endblock %}
 
@@ -27,7 +27,7 @@
                 <td>{{ estimationoffrelivre.pointestime }}</td>
                 <td>{{ estimationoffrelivre.etat }}</td>
                 <td>
-                    <a href="{{ path('app_estimationoffrelivre_show', {'idestimationoffrelivre': estimationoffrelivre.idestimationoffrelivre}) }}">show</a>
+                    <a href="{{ path('myEstimation', {'idestimationoffrelivre': estimationoffrelivre.idestimationoffrelivre}) }}">show</a>
                     <a href="{{ path('app_estimationoffrelivre_edit', {'idestimationoffrelivre': estimationoffrelivre.idestimationoffrelivre}) }}">edit</a>
                 </td>
             </tr>

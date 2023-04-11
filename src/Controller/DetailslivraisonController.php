@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Detailslivraison;
+use App\Entity\Estimationoffrelivre;
 use App\Form\DetailslivraisonType;
 use App\Repository\DetailslivraisonRepository;
+use App\Repository\EstimationoffrelivreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,23 +22,35 @@ class DetailslivraisonController extends AbstractController
             'detailslivraisons' => $detailslivraisonRepository->findAll(),
         ]);
     }
+    #[Route('/mesLivraisons', name: 'mesLivraisons', methods: ['GET'])]
+    public function mesLivraison(DetailslivraisonRepository $detailslivraisonRepository): Response
+    {
+        return $this->render('detailslivraison/show_my_livraisons.html.twig', [
+            'detailslivraisons' => $detailslivraisonRepository->findAll(),
+        ]);
+    }
 
-    #[Route('/new', name: 'app_detailslivraison_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, DetailslivraisonRepository $detailslivraisonRepository): Response
+    #[Route('/{idestimationoffrelivre}/new', name: 'app_detailslivraison_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, DetailslivraisonRepository $detailslivraisonRepository,
+                        Estimationoffrelivre $estimationoffrelivre,EstimationoffrelivreRepository $estimationoffrelivreRepository): Response
     {
         $detailslivraison = new Detailslivraison();
         $form = $this->createForm(DetailslivraisonType::class, $detailslivraison);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $estimationoffrelivre->setEtat("Acceptée");
+            $estimationoffrelivreRepository->save($estimationoffrelivre,true);
+            $detailslivraison->setEtatlivrasion("EnAttente");
+            $detailslivraison->setIdestimationoffrelivre($estimationoffrelivre);
             $detailslivraisonRepository->save($detailslivraison, true);
 
-            return $this->redirectToRoute('app_detailslivraison_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('mesLivraisons', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('detailslivraison/new.html.twig', [
             'detailslivraison' => $detailslivraison,
-            'form' => $form,
+            'form' => $form,'estimationoffrelivre' => $estimationoffrelivre
         ]);
     }
 
@@ -44,6 +58,14 @@ class DetailslivraisonController extends AbstractController
     public function show(Detailslivraison $detailslivraison): Response
     {
         return $this->render('detailslivraison/show.html.twig', [
+            'detailslivraison' => $detailslivraison,
+        ]);
+    }
+
+    #[Route('/{iddetailslivraison}/showMyLivraison', name: 'showMyLivraison', methods: ['GET'])]
+    public function showMyLivraison(Detailslivraison $detailslivraison): Response
+    {
+        return $this->render('detailslivraison/show_details_of_my_livraison.html.twig', [
             'detailslivraison' => $detailslivraison,
         ]);
     }

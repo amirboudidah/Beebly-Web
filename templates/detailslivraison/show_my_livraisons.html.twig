@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'templateFront.html.twig' %}
 
 {% block title %}Detailslivraison index{% endblock %}
 
@@ -21,7 +21,7 @@
                 <td>{{ detailslivraison.etatlivrasion }}</td>
                 <td>{{ detailslivraison.adresselivraison }}</td>
                 <td>
-                    <a href="{{ path('app_detailslivraison_show', {'iddetailslivraison': detailslivraison.iddetailslivraison}) }}">show</a>
+                    <a href="{{ path('showMyLivraison', {'iddetailslivraison': detailslivraison.iddetailslivraison}) }}">show</a>
                     <a href="{{ path('app_detailslivraison_edit', {'iddetailslivraison': detailslivraison.iddetailslivraison}) }}">edit</a>
                 </td>
             </tr>

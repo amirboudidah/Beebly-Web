@@ -5,6 +5,49 @@
 {% block body %}
     <h1>Edit Estimationoffrelivre</h1>
 
+    <table class="table">
+        <tbody>
+
+        <tr>
+        <tr>
+            <th>Id estimationoffrelivre</th>
+            <td>{{ estimationoffrelivre.idestimationoffrelivre }}</td>
+        </tr>
+        <th>Id propositionlivre</th>
+        <td>{{ estimationoffrelivre.idproposition.idpropositionlivre }}</td>
+        </tr>
+        <tr>
+            <th>Titre livre</th>
+            <td>{{ estimationoffrelivre.idproposition.titrelivre }}</td>
+        </tr>
+        <tr>
+            <th>Editon</th>
+            <td>{{ estimationoffrelivre.idproposition.editon }}</td>
+        </tr>
+        <tr>
+            <th>Date proposition</th>
+            <td>{{ estimationoffrelivre.idproposition.dateproposition ? estimationoffrelivre.idproposition.dateproposition|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Description etat</th>
+            <td>{{ estimationoffrelivre.idproposition.descriptionetat }}</td>
+        </tr>
+        <tr>
+            <th>User</th>
+            <td>{{ estimationoffrelivre.idproposition.idclient.nom }}</td>
+        </tr>
+
+        <tr>
+            <th>Pointestime</th>
+            <td>{{ estimationoffrelivre.pointestime }}</td>
+        </tr>
+        <tr>
+            <th>Etat</th>
+            <td>{{ estimationoffrelivre.etat }}</td>
+        </tr>
+        </tbody>
+    </table>
+
     {{ include('estimationoffrelivre/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_estimationoffrelivre_index') }}">back to list</a>

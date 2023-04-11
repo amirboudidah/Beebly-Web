@@ -106,6 +106,11 @@ class ClotureAchat
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return $this->idCloture;
+    }
+
 
 
 }
