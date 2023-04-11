@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Form;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+use App\Entity\Reclamation;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ReclamationType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            
+            ->add('sujet')
+            ->add('description')
+            
+            //->add('photo')
+            ->add('type',ChoiceType::class, [
+                'choices' => [
+                    'Help' => 'Help',
+                    'FeedBack' => 'Feedback',
+
+                ],
+                'label' => 'Select your status',
+            ])
+            ->add('status',ChoiceType::class, [
+                'choices' => [
+                    'Traité' => 'Traité',
+                    'Non Traité' => 'non Traité',
+                ],
+                'label' => 'Select your status',
+            ])
+            
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Reclamation::class,
+        ]);
+    }
+}

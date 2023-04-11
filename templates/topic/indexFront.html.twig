@@ -1,0 +1,37 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}Topics {% endblock %}
+
+{% block body %}
+    <h1>Topics</h1>
+    <div class="row">
+        {% for topic in topics %}
+       
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic">
+                        </div>
+                        <div class="blog__item__text">
+                            <ul>
+                                <li><i class="fa fa-calendar-o px-2"></i>{{ topic.date ? topic.date|date('Y-m-d') : '' }}</li>
+                                <li><i class="fa fa-comment-o px-2 "></i> {{ topic.nbsujet }} Subjects</li>
+                            </ul>
+                            <h5><a href="#">{{ topic.titretopic }}</a></h5>
+                            <p>{{ topic.description }}</p>
+                                                        <div>  <a href="{{ path('app_sujet_new', {'idtopic': topic.idtopic}) }}"><button class="btn btn-primary">New Subject</button></a></div>
+
+                            <div>  <a href="{{ path('showFront', {'idtopic': topic.idtopic}) }}"><button class="btn btn-primary">View</button></a></div>
+                        </div>
+                    </div>
+                </div>
+           
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+
+      </div>
+
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}Sujets{% endblock %}
+
+{% block body %}
+    <h1>Sujet</h1>
+
+<div class="col-lg-6 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic">
+                        </div>
+                        <div class="blog__item__text">
+                            <ul>
+                                <li><i class="fa fa-calendar-o px-2"></i>{{ sujet.date ? sujet.date|date('Y-m-d') : '' }}</li>
+                                <li><i class="fa fa-comment-o px-2 "></i> {{ sujet.nbcom }}</li>
+                            </ul>
+                            <h5><a href="#">{{ sujet.titresujet }}</a></h5>
+                            <p>{{ sujet.contenu }}</p>
+                                                      
+                            
+                        </div>
+                    </div>
+                </div>
+  
+        {% for c in commentaires %}
+        <div>
+        <h2>Comment :{{c.idcom}}</h2>
+        <h2>Contenu:{{c.contenu}}</h2>
+        <h4>{{c.date? c.date|date('Y-m-d') : '' }}</h4>
+        {% endfor %}
+        <div>
+        <h1>Add Commentaire</h1>
+        
+    {{ include('commentaire/_form.html.twig') }}
+
+{% endblock %}

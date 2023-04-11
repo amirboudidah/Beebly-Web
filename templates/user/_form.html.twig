@@ -1,0 +1,59 @@
+{{ form_start(form, {attr: {novalidate: 'novalidate'}})}}
+   <table>
+   <tr>
+    <td>{{form_label(form.nom,"Nom")}}</td>
+    
+    <td>{{form_widget(form.nom,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.nom)}}</td>
+   </tr>
+
+      <tr>
+    <td>{{form_label(form.prenom,"prenom")}}</td>
+    
+    <td>{{form_widget(form.prenom,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.prenom)}}</td>
+   </tr>
+
+         <tr>
+    <td>{{form_label(form.adrmail,"Email")}}</td>
+    
+    <td>{{form_widget(form.adrmail,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.adrmail)}}</td>
+   </tr>
+
+         <tr>
+    <td>{{form_label(form.mdp,"mdp")}}</td>
+    
+    <td>{{form_widget(form.mdp,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.mdp)}}</td>
+   </tr>
+            <tr>
+    <td>{{form_label(form.adresse,"adresse")}}</td>
+    
+    <td>{{form_widget(form.adresse,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.adresse)}}</td>
+   </tr>
+            <tr>
+    <td>{{form_label(form.tel,"tel")}}</td>
+    
+    <td>{{form_widget(form.tel,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.tel)}}</td>
+   </tr>
+               <tr>
+    <td>{{form_label(form.cin,"cin")}}</td>
+    
+    <td>{{form_widget(form.cin,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.cin)}}</td>
+   </tr>
+   </table>
+   
+    {{ form_widget(form) }}
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

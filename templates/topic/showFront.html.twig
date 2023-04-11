@@ -1,0 +1,55 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}Topics {% endblock %}
+
+{% block body %}
+    <h1>Topic details</h1>
+    <div class="row">
+       
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic">
+                        </div>
+                        <div class="blog__item__text">
+                            <ul>
+                                <li><i class="fa fa-calendar-o px-2"></i>{{ topic.date ? topic.date|date('Y-m-d') : '' }}</li>
+                                <li><i class="fa fa-comment-o px-2 "></i> {{ topic.nbsujet }} Subjects</li>
+                            </ul>
+                            <h5><a href="#">{{ topic.titretopic }}</a></h5>
+                            <p>{{ topic.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                 </div>
+                <div class="row">
+        <h1 class="col-12">Listes des Sujets</h1>
+
+             {% for sujet in sujets %}
+        {% if sujet.accepter == 0 %}
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic">
+                        </div>
+                        <div class="blog__item__text">
+                            <ul>
+                                <li><i class="fa fa-calendar-o px-2"></i>{{ sujet.date ? topic.date|date('Y-m-d') : '' }}</li>
+                                <li><i class="fa fa-comment-o px-2 "></i> {{ sujet.nbcom }} Subjects</li>
+                            </ul>
+                            <h5><a href="#">{{ sujet.titresujet }}</a></h5>
+                            <p>{{ sujet.contenu }}</p>
+                            <div><a href="{{path('frontSujet',{'idsujet': sujet.idsujet})}}"> <button class="btn btn-primary">Details</button></a></div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+    
+        </div>
+   
+
+
+{% endblock %}

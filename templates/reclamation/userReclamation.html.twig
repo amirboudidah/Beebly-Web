@@ -1,0 +1,42 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}Liste des Reclamations{% endblock %}
+     
+{% block body %}
+    <h1>Liste des Reclamations</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Sujet</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reclamation in reclamations %}
+            <tr>
+                <td>{{ reclamation.type }}</td>
+                <td>{{ reclamation.sujet }}</td>
+                <td>{{ reclamation.description }}</td>
+                <td>{{ reclamation.date ? reclamation.date|date('Y-m-d') : '' }}</td>
+                <td>{{ reclamation.status }}</td>
+                <td>
+                    <a href="{{ path('showFrontt', {'id': reclamation.id}) }}"><button class="btn btn-secondary"> Show </button></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reclamation_new') }}"><button class="btn btn-primary"> Create New </button></a>
+
+{% endblock %}
+
+

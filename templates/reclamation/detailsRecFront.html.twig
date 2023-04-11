@@ -1,0 +1,40 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}Reclamation{% endblock %}
+
+{% block body %}
+    <h1>Reclamation</h1>
+
+    <table class="table">
+        <tbody>
+       
+            <tr>
+                <th>Type</th>
+                <td>{{ reclamation.type }}</td>
+            </tr>
+            <tr>
+                <th>Sujet</th>
+                <td>{{ reclamation.sujet }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ reclamation.description }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ reclamation.date ? reclamation.date|date('Y-m-d') : '' }}</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>{{ reclamation.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('reclamationFront') }}"><button class="btn btn-primary"> Back </button></a>
+
+    <div ><h1>Reponse :</h1></div>
+    <h3>Message :{{reponse.contenu}}</h3>
+    <h6>Date :{{ reponse.date ? reponse.date|date('Y-m-d') : '' }}</h6>
+{% endblock %}
