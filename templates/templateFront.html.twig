@@ -130,18 +130,15 @@
             </div>
         </div>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="header__logo">
-                        <a href="./index.html"><img src="{{ asset('front/img/logo.png')}}" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
+
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="./index.html">Home</a></li>
                             <li><a href="{{path('app_user_profilefront')}}">Profile</a></li>
                             <li><a href="{{path('show_my_propositions')}}">Proposition livre</a></li>
+                            <li><a href="{{path('mes_offres')}}">Estimation offre</a></li>
+                            <li><a href="{{path('mesLivraisons')}}">Détails livraison</a></li>
+                            <li><a href="{{path('mesclotures')}}">Cloture achat</a></li>
 
                             <li><a href="{{path('app_reclamation_new')}}">Reclamation</a></li>
                             <li><a href="{{path('app_evenement_index')}}">Evenement</a></li>

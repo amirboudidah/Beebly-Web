@@ -21,6 +21,13 @@ class ClotureAchatController extends AbstractController
             'cloture_achats' => $clotureAchatRepository->findAll(),
         ]);
     }
+    #[Route('/mesclotures', name: 'mesclotures', methods: ['GET'])]
+    public function mesclotures(ClotureAchatRepository $clotureAchatRepository): Response
+    {
+        return $this->render('cloture_achat/show_my_clotures.html.twig', [
+            'cloture_achats' => $clotureAchatRepository->findAll(),
+        ]);
+    }
 
     #[Route('/{iddetailslivraison}/new', name: 'app_cloture_achat_new', methods: ['GET', 'POST'])]
     public function new(Request $request, ClotureAchatRepository $clotureAchatRepository,Detailslivraison $iddetailslivraison): Response
@@ -46,6 +53,13 @@ class ClotureAchatController extends AbstractController
     public function show(ClotureAchat $clotureAchat): Response
     {
         return $this->render('cloture_achat/show.html.twig', [
+            'cloture_achat' => $clotureAchat,
+        ]);
+    }
+    #[Route('/{idCloture}/macloture', name: 'macloture', methods: ['GET'])]
+    public function macloture(ClotureAchat $clotureAchat): Response
+    {
+        return $this->render('cloture_achat/show_details_of_my_cloture.html.twig', [
             'cloture_achat' => $clotureAchat,
         ]);
     }

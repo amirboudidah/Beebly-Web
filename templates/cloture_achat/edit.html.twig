@@ -4,6 +4,47 @@
 
 {% block body %}
     <h1>Edit ClotureAchat</h1>
+<table class="table">
+    <tbody>
+    <tr>
+        <th>IdCloture</th>
+        <td>{{ cloture_achat.idCloture }}</td>
+    </tr>
+    <tr>
+        <th>Titre livre</th>
+        <td>{{ cloture_achat.idDetailsLivraison.idestimationoffrelivre.idproposition.titrelivre }}</td>
+    </tr>
+    <tr>
+        <th>Editon</th>
+        <td>{{ cloture_achat.idDetailsLivraison.idestimationoffrelivre.idproposition.editon }}</td>
+    </tr>
+    <tr>
+        <th>Date proposition</th>
+        <td>{{ cloture_achat.idDetailsLivraison.idestimationoffrelivre.idproposition.dateproposition ? cloture_achat.idDetailsLivraison.idestimationoffrelivre.idproposition.dateproposition|date('Y-m-d') : '' }}</td>
+    </tr>
+    <tr>
+        <th>Description etat</th>
+        <td>{{ cloture_achat.idDetailsLivraison.idestimationoffrelivre.idproposition.descriptionetat }}</td>
+    </tr>
+
+
+    <tr>
+        <th>Pointestime</th>
+        <td>{{ cloture_achat.idDetailsLivraison.idestimationoffrelivre.pointestime }}</td>
+    </tr>
+    <tr>
+        <th>proposition</th>
+        <td>{{ cloture_achat.idDetailsLivraison.idestimationoffrelivre.etat }}</td>
+    </tr>
+    <tr>
+        <th>Etatlivrasion</th>
+        <td>{{ cloture_achat.idDetailsLivraison.etatlivrasion }}</td>
+    </tr>
+    <tr>
+        <th>Adresselivraison</th>
+        <td>{{ cloture_achat.idDetailsLivraison.adresselivraison }}</td>
+    </tr>
+</table>
 
     {{ include('cloture_achat/_form.html.twig', {'button_label': 'Update'}) }}
 

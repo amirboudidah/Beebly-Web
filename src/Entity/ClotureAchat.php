@@ -28,21 +28,21 @@ class ClotureAchat
      *
      * @ORM\Column(name="pointAchatFinale", type="integer", nullable=true, options={"default"="NULL"})
      */
-    private $pointachatfinale = NULL;
+    private $pointachatfinale ;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="etatCloture", type="string", length=45, nullable=true, options={"default"="NULL"})
      */
-    private $etatcloture = 'NULL';
+    private $etatcloture ;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="etatLivre", type="string", length=45, nullable=true, options={"default"="NULL"})
      */
-    private $etatlivre = 'NULL';
+    private $etatlivre ;
 
     /**
      * @var \Detailslivraison

@@ -1,0 +1,37 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}ClotureAchat index{% endblock %}
+
+{% block body %}
+    <h1>ClotureAchat index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>IdCloture</th>
+            <th>Pointachatfinale</th>
+            <th>Etatcloture</th>
+            <th>Etatlivre</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cloture_achat in cloture_achats %}
+            <tr>
+                <td>{{ cloture_achat.idCloture }}</td>
+                <td>{{ cloture_achat.pointachatfinale }}</td>
+                <td>{{ cloture_achat.etatcloture }}</td>
+                <td>{{ cloture_achat.etatlivre }}</td>
+                <td>
+                    <a href="{{ path('macloture', {'idCloture': cloture_achat.idCloture}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

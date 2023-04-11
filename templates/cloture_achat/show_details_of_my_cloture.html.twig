@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'templateFront.html.twig' %}
 
 {% block title %}ClotureAchat{% endblock %}
 
@@ -60,9 +60,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_cloture_achat_index') }}">back to list</a>
+    <a href="{{ path('mesclotures') }}">back to list</a>
 
-    <a href="{{ path('app_cloture_achat_edit', {'idCloture': cloture_achat.idCloture}) }}">edit</a>
 
-    {{ include('cloture_achat/_delete_form.html.twig') }}
 {% endblock %}
