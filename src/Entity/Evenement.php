@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Evenement
  *
@@ -25,6 +25,18 @@ class Evenement
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Remplir ce champ")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
     private $libelle;
 
@@ -46,6 +58,18 @@ class Evenement
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Remplir ce champ")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
     private $description;
 
@@ -53,6 +77,18 @@ class Evenement
      * @var string
      *
      * @ORM\Column(name="emplacement", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Remplir ce champ")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
     private $emplacement;
 
@@ -60,6 +96,7 @@ class Evenement
      * @var int
      *
      * @ORM\Column(name="nb_place", type="integer", nullable=false)
+     * @Assert\NotBlank(message="Remplir ce champ")
      */
     private $nbPlace;
 
@@ -67,6 +104,7 @@ class Evenement
      * @var int
      *
      * @ORM\Column(name="duree", type="integer", nullable=false)
+     * @Assert\NotBlank(message="Remplir ce champ")
      */
     private $duree;
 

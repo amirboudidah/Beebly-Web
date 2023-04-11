@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Reclamation
@@ -26,6 +27,7 @@ class Reclamation
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=30, nullable=false)
+     * @Assert\NotBlank(message="type cannot be null")
      */
     private $type;
 
@@ -33,6 +35,18 @@ class Reclamation
      * @var string
      *
      * @ORM\Column(name="sujet", type="string", length=100, nullable=false)
+     * @Assert\NotBlank(message="sujet cannot be null")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
     private $sujet;
 
@@ -40,15 +54,28 @@ class Reclamation
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=8000, nullable=false)
+     * @Assert\NotBlank(message="description cannot be null")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 50,
+     *      minMessage = "Votre message doit avoir au minimum 5 caractéres",
+     *      maxMessage = "Votre message doit avoir au maximum 50 caractéres"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[A-Z]/",
+     *     match=true,
+     *     message="Votre message doit commencer par une lettre majuscule"
+     * )
      */
     private $description;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="date", type="date", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="date", type="date", nullable=true)
+     * 
      */
-    private $date = 'NULL';
+    private $date = '';
 
     /**
      * @var string
@@ -61,6 +88,7 @@ class Reclamation
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=20, nullable=false)
+     * @Assert\NotBlank(message="status cannot be null")
      */
     private $status;
 
@@ -184,6 +212,9 @@ class Reclamation
 
         return $this;
     }
-
+    public function __toString(): string
+    {
+        return $this->id;
+    }
 
 }
