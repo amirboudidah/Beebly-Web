@@ -23,6 +23,7 @@ class UserController extends AbstractController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager,Request $request,SessionInterface $session): Response
     {
+        $user = new User();
         if($session!=null)
         {
         $id =$session->get('id');
@@ -56,15 +57,20 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-
+        $adrmail = $form["adrmail"]->getData();
         if ($form->isSubmitted() && $form->isValid()) {
+            $existingUser = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['adrmail' => $adrmail]);
+        
+            if ($existingUser==null) {
             $user->setType("admin");
             $user->setSoldepoint(0);
             $entityManager->persist($user);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-        }
+        }}
 
         return $this->renderForm('user/new.html.twig', [
             'user' => $user,
@@ -157,11 +163,13 @@ class UserController extends AbstractController
 $user = new User();
 $form = $this->createForm(UserType::class, $user);
 $form->handleRequest($request);
-
+$adrmail = $form["adrmail"]->getData();
 if ($form->isSubmitted() && $form->isValid()) {
+    $existingUser = $entityManager
+    ->getRepository(User::class)
+    ->findOneBy(['adrmail' => $adrmail]);
 
-
-    if ($user==null) {
+    if ($existingUser==null) {
         $user->setType("client");
         $user->setSoldepoint(0);
         $entityManager->persist($user);
@@ -177,7 +185,7 @@ if ($form->isSubmitted() && $form->isValid()) {
         // Create the email
         $email = (new Email())
             ->from('beeblyinfo@gmail.com')
-            ->to('beeblyinfo@gmail.com')
+            ->to($adrmail)
             ->subject('Subject of the email')
             ->text('Plain text content of the email')
             ->html('<p>HTML content of the email</p>');
@@ -192,6 +200,7 @@ if ($form->isSubmitted() && $form->isValid()) {
 }  
         return $this->renderForm('user/signup.html.twig', [
             'form' => $form,
+            'user' => $user,
         ]);
     }
     }
@@ -212,16 +221,14 @@ if ($form->isSubmitted() && $form->isValid()) {
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($user);
             $entityManager->flush();
-         
-
-         
-
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('user/profile.html.twig', [
             'user' => $user,
             'form' => $form,
+            'mdp' => $user->getMdp(),
+            
         ]);
     }
     }
@@ -244,7 +251,7 @@ if ($form->isSubmitted() && $form->isValid()) {
        
     }
 
-    public function sendEmail(MailerInterface $mailer,User $user)
+    public function sendEmail(MailerInterface $mailer,User $user,string $email)
     {
         $email = (new Email())
             ->from('beeblyinfo@gmail.com')

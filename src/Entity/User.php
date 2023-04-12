@@ -25,52 +25,61 @@ class User
      */
     private $id;
 
- /**
+     /**
+     * @ORM\Column(name="nom",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The name field is required.")
      * @Assert\Length(max=25, maxMessage="The name field cannot exceed {{ limit }} characters.")
      */
     private $nom;
 
     /**
+     * @ORM\Column(name="prenom",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The first name field is required.")
      * @Assert\Length(max=25, maxMessage="The first name field cannot exceed {{ limit }} characters.")
      */
     private $prenom;
 
     /**
+     * @ORM\Column(name="adrmail",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The email field is required.")
      * @Assert\Email(message="The email '{{ value }}' is not a valid email address.")
      */
     private $adrmail;
 
     /**
+     * @ORM\Column(name="mdp",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The password field is required.")
      * @Assert\Length(max=25, maxMessage="The password field cannot exceed {{ limit }} characters.")
      */
     private $mdp;
 
     /**
+     * @ORM\Column(name="adresse",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The address field is required.")
      * @Assert\Length(max=100, maxMessage="The address field cannot exceed {{ limit }} characters.")
      */
     private $adresse;
 
     /**
+     * @ORM\Column(name="tel",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The phone number field is required.")
      * @Assert\Length(max=25, maxMessage="The phone number field cannot exceed {{ limit }} characters.")
      */
     private $tel;
 
     /**
+     * @ORM\Column(name="type",type="string", length=6, nullable=true)
      */
     private $type;
 
     /**
+     * @ORM\Column(name="cin",type="integer", nullable=true)
      * @Assert\NotBlank(message="The CIN field is required.")
      */
     private $cin;
 
     /**
+     * @ORM\Column(name="soldepoint",type="integer", nullable=true)
      */
     private $soldepoint;
 
@@ -84,7 +93,7 @@ class User
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -96,7 +105,7 @@ class User
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setPrenom(?string $prenom): self
     {
         $this->prenom = $prenom;
 
@@ -108,7 +117,7 @@ class User
         return $this->adrmail;
     }
 
-    public function setAdrmail(string $adrmail): self
+    public function setAdrmail(?string $adrmail): self
     {
         $this->adrmail = $adrmail;
 
@@ -120,7 +129,7 @@ class User
         return $this->mdp;
     }
 
-    public function setMdp(string $mdp): self
+    public function setMdp(?string $mdp): self
     {
         $this->mdp = $mdp;
 
@@ -132,7 +141,7 @@ class User
         return $this->adresse;
     }
 
-    public function setAdresse(string $adresse): self
+    public function setAdresse(?string $adresse): self
     {
         $this->adresse = $adresse;
 
@@ -144,7 +153,7 @@ class User
         return $this->tel;
     }
 
-    public function setTel(string $tel): self
+    public function setTel(?string $tel): self
     {
         $this->tel = $tel;
 
@@ -156,7 +165,7 @@ class User
         return $this->type;
     }
 
-    public function setType(string $type): self
+    public function setType(?string $type): self
     {
         $this->type = $type;
 
@@ -168,7 +177,7 @@ class User
         return $this->cin;
     }
 
-    public function setCin(int $cin): self
+    public function setCin(?int $cin): self
     {
         $this->cin = $cin;
 
@@ -180,7 +189,7 @@ class User
         return $this->soldepoint;
     }
 
-    public function setSoldepoint(int $soldepoint): self
+    public function setSoldepoint(?int $soldepoint): self
     {
         $this->soldepoint = $soldepoint;
 
