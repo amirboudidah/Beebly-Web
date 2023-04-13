@@ -18,7 +18,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class ReclamationController extends AbstractController
 {
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager
+    ): Response
     {
         $reclamations = $entityManager
             ->getRepository(Reclamation::class)
