@@ -24,7 +24,7 @@ class UserController extends AbstractController
     public function index(EntityManagerInterface $entityManager,Request $request,SessionInterface $session): Response
     {
         $user = new User();
-        if($session!=null)
+        if($session->get('id')!=null)
         {
         $id =$session->get('id');
         if ($id!= null){
@@ -45,6 +45,8 @@ class UserController extends AbstractController
 
             }
 
+        }    else{
+            return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
         }
      
     }
@@ -52,7 +54,7 @@ class UserController extends AbstractController
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
-        if($session!=null)
+        if($session->get('id')!=null)
         {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -76,24 +78,28 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+        }    else{
+            return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
         }
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user,SessionInterface $session): Response
     {
-        if($session!=null)
+        if($session->get('id')!=null)
         {
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
+        }    else{
+            return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
         }
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
-        if($session!=null)
+        if($session->get('id')!=null)
         {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -108,13 +114,15 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+        }    else{
+            return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
         }
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
-        if($session!=null)
+        if($session->get('id')!=null)
         {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
@@ -122,6 +130,8 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }    else{
+        return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
     }
     }
     #[Route('/front/signin', name: 'app_user_signin', methods: ['GET', 'POST'])]
@@ -158,8 +168,7 @@ class UserController extends AbstractController
 
     #[Route('/front/signup', name: 'app_user_signup', methods: ['GET', 'POST'])]
     public function signup(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
-    {        if($session!=null)
-        {
+    {        
 $user = new User();
 $form = $this->createForm(UserType::class, $user);
 $form->handleRequest($request);
@@ -202,12 +211,12 @@ if ($form->isSubmitted() && $form->isValid()) {
             'form' => $form,
             'user' => $user,
         ]);
-    }
+    
     }
 
     #[Route('/back/profile', name: 'app_user_profile', methods: ['GET', 'POST'])]
     public function profile(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
-    {        if($session!=null)
+    {        if($session->get('id')!=null)
         {
         //TODO NJIB LUSER
         $user = new User();
@@ -230,12 +239,12 @@ if ($form->isSubmitted() && $form->isValid()) {
             'mdp' => $user->getMdp(),
             
         ]);
-    }
+    }else{return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);}
     }
 
     #[Route('/back/deleteAccount', name: 'app_user_deleteAccount', methods: ['GET', 'POST'])]
     public function deleteAccount(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
-    {        if($session!=null)
+    {        if($session->get('id')!=null)
         {
         $id = $session->get('id');
         $user = $entityManager
@@ -247,6 +256,8 @@ if ($form->isSubmitted() && $form->isValid()) {
             
             return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
       
+        }    else{
+            return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
         }
        
     }
@@ -267,18 +278,18 @@ if ($form->isSubmitted() && $form->isValid()) {
     #[Route('/log/out', name: 'app_user_logout', methods: ['GET', 'POST'])]
     public function logout(Request $request, EntityManagerInterface $entityManager,SessionInterface $session)
     {
-        if($session!=null)
+        if($session->get('id')!=null)
         {
-            $session=null;
+            $session->invalidate();
             return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
       
-        }
+        }else{return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);}
     }
 
     #[Route('/front/profile', name: 'app_user_profilefront', methods: ['GET', 'POST'])]
     public function profileFront(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
-        if($session!=null)
+        if($session->get('id')!=null)
         {
         //TODO NJIB LUSER
         $user = new User();
@@ -303,6 +314,9 @@ if ($form->isSubmitted() && $form->isValid()) {
             'user' => $user,
             'form' => $form,
         ]);
+    }
+    else{
+        return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
     }
 }
 }
