@@ -4,6 +4,28 @@
 
 {% block body %}
     <h1>User index</h1>
+                    <a href="{{ path('pdfUsers') }}"><button class="btn btn-warning" >Export To PDF</button></a>
+
+
+<form id="searchForm" action="{{ path('recSearch') }}" method="GET">
+<div class="row my-3">
+<div class="col-2">
+    <select id="searchType" name="searchType" class="form-control">
+        <option value="nom">Nom</option>
+        <option value="prenom">Prenom</option>
+        <option value="adrmail">Adresse Mail</option>
+    </select>
+    </div>
+    <div class="col-4">
+    <input id="searchValue" type="text" name="searchValue" class="form-control" placeholder="search..."/>
+    </div>
+   <div class="col-3">
+            <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+
+</div>
+</form>
+
 
     <table class="table">
         <thead>
@@ -19,7 +41,7 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="searchResults">
         {% for user in users %}
             <tr>
                 <td>{{ user.nom }}</td>
@@ -43,4 +65,66 @@
     </table>
 
     <a href="{{ path('app_user_new') }}"><button class="btn btn-primary" >Create new</button></a>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ 
+
+<script>
+// AJAX call for search form submission
+jQuery('#searchForm').on('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission behavior
+
+    // Get the form data
+    var searchType = $('#searchType').val();
+    var searchValue = $('#searchValue').val();
+
+    // Make the AJAX call
+    jQuery.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        data: {
+            'searchType': searchType,
+            'searchValue': searchValue
+        },
+        success: function(data) {
+            console.log(data);
+            // Clear existing search results
+            jQuery('#searchResults').empty();
+
+            // Check if events data is available
+            if (data.hasOwnProperty('users')) {
+                console.log(data);
+                // Iterate through the retrieved events and append them to the searchResults div
+                
+                data.users.forEach(function(user) {
+
+                    var evenementHtml = `
+                        <tr>
+                <td>${ user.nom }</td>
+                <td>${ user.prenom }</td>
+                <td>${ user.adrmail }</td>
+                <td>${ user.adresse }</td>
+                <td>${ user.tel }</td>
+                <td>${ user.type }</td>
+                <td>${ user.cin }</td>
+                <td>${ user.soldepoint }</td>
+                <td>
+                <a href="/user/${user.id}"><button class="btn btn-warning">Show</button></a>
+</td>
+            </tr>
+                    `;
+                    console.log(evenementHtml);
+                    jQuery('#searchResults').append(evenementHtml);
+                });
+            } else {
+                // If no events found, append a message to the searchResults div
+                jQuery('#searchResults').append('<div>no users found</div>');
+            }
+
+            jQuery('#searchResults').show(); // Show the search results
+            
+        }
+    });
+});
+</script>
 {% endblock %}

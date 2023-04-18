@@ -16,7 +16,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mime\Email;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/user')]
 class UserController extends AbstractController
 {
@@ -27,7 +29,6 @@ class UserController extends AbstractController
         if($session->get('id')!=null)
         {
         $id =$session->get('id');
-        if ($id!= null){
             $user = $entityManager
             ->getRepository(User::class)->find($id);
             if ($user->getType()=='admin'){
@@ -38,25 +39,101 @@ class UserController extends AbstractController
             return $this->render('user/index.html.twig', [
                 'users' => $users,
             ]);
+            }     
+            else{
+                $route = $request->headers->get('referer');
+                return $this->redirect($route);
+
             }
-        }
+        
+
+        }    
         else{
-                return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
-
-            }
-
-        }    else{
             return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
         }
      
     }
+    #[Route('/export/pdf', name: 'pdfUsers', methods: ['GET'])]
+    public function pdfd (EntityManagerInterface $entityManager,Request $request): Response
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+//        $pdfOptions->set('defaultFont', 'Arial');
 
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+//        $produit = $produitRepository->findAll();
+
+        // Retrieve the HTML generated in our twig file
+        $data=$entityManager
+        ->getRepository(User::class)
+        ->findAll();
+       
+        $html = $this->renderView('user/pdf.html.twig',[
+            'users' => $data,
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("Users.pdf", [
+            "Attachment" => true
+        ]);
+        return new Response('', 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    #[Route('/front/recSearch', name: 'recSearch', methods: ['GET','POST'])]
+    public function search(Request $request, EntityManagerInterface $entityManager)
+    {
+        // Get search parameters from request
+        $searchType = $request->query->get('searchType');
+        $searchValue = $request->query->get('searchValue');
+        
+        // Query the database with search parameters using DQL
+        $query = $entityManager->createQuery("SELECT t FROM App\Entity\User t WHERE t.$searchType LIKE :searchValue")
+            ->setParameter('searchValue', '%' . $searchValue . '%');
+        $users = $query->getResult();
+       
+         // Manually serialize entities to avoid circular references
+         $serializedRecs = [];
+         foreach ($users as $user) {
+             $serializedRecs[] = [
+                
+                'id' => $user->getId(),
+                 'adresse' => $user->getAdresse(),
+                 'adrmail' => $user->getAdrmail(),
+                 'cin' => $user->getCin(),
+                 'nom' => $user->getNom(),
+                 'prenom' => $user->getPrenom(),
+                 'soldepoint' => $user->getSoldepoint(),
+                 
+                 'type' => $user->getType(),
+                 'tel' => $user->getTel(),
+                 
+             ];
+         }
+            // Create JSON response
+        $response = new JsonResponse();
+        $response->setData(['users' => $serializedRecs]);
+        return $response;
+    }
+    
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
+        $user = new User();
         if($session->get('id')!=null)
         {
-        $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         $adrmail = $form["adrmail"]->getData();
@@ -83,15 +160,22 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user,SessionInterface $session): Response
+    #[Route('/{id}', name: 'app_user_show', methods: ['GET','POST'])]
+    public function show($id,Request $request, EntityManagerInterface $entityManager,User $user,SessionInterface $session): Response
     {
+        $user = new User();
         if($session->get('id')!=null)
         {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-        ]);
-        }    else{
+
+            $user = $entityManager
+            ->getRepository(User::class)->find($id);
+         
+                return $this->render('user/show.html.twig', [
+                    'user' => $user,
+                ]);
+         
+        }    
+        else{
             return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
         }
     }
@@ -119,7 +203,7 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
         if($session->get('id')!=null)
@@ -154,7 +238,6 @@ class UserController extends AbstractController
                     return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     
                 }else if ($connectedUser->getType()=='client'){
-                    //TODO Change when front end integrated
                     return $this->redirectToRoute('app_user_profilefront', [], Response::HTTP_SEE_OTHER);
                 };
             }
