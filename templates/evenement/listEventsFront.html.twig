@@ -2,10 +2,25 @@
 
 {% block title %}Liste des Evenements{% endblock %}
      
+
 {% block body %}
     <h1>Liste des Evenements</h1>
 
 <div class="row">
+
+<form id="searchForm" action="{{ path('eventSearch') }}" method="GET">
+    <select id="searchType" name="searchType">
+        <option value="libelle">Libelle</option>
+        <option value="description">Description</option>
+        <option value="emplacement">Emplacement</option>
+    </select>
+    <input id="searchValue" type="text" name="searchValue" />
+    <button type="submit">Search</button>
+</form>
+
+</div>
+
+<div class="row"  id="searchResults">
         {% for evenement in evenements %}
            
                 <div class="col-lg-4 col-md-4 col-sm-6">
@@ -21,7 +36,7 @@
                             <h5><a href="#">{{ evenement.libelle }}</a></h5>
                             <h3>{{ evenement.duree }} hours hosted at {{ evenement.emplacement }}</h3>
                             <p>{{ evenement.description }}</p>
-                            <div> <button class="btn btn-primary">Order now </button></div>
+                            <div> <a href="{{path('showEventFront',{'id':evenement.id})}}"><button class="btn btn-primary">Details </button></a></div>
                         </div>
                     </div>
                 </div>
@@ -34,6 +49,67 @@
         {% endfor %}
         </div>
    
-{% endblock %}
+<script>
+// AJAX call for search form submission
+$('#searchForm').on('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission behavior
 
+    // Get the form data
+    var searchType = $('#searchType').val();
+    var searchValue = $('#searchValue').val();
+
+    // Make the AJAX call
+    $.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        data: {
+            'searchType': searchType,
+            'searchValue': searchValue
+        },
+        success: function(data) {
+            console.log(data);
+            // Clear existing search results
+            $('#searchResults').empty();
+
+            // Check if events data is available
+            if (data.hasOwnProperty('evenements')) {
+                console.log(data);
+                // Iterate through the retrieved events and append them to the searchResults div
+                
+                data.evenements.forEach(function(evenement) {
+                    var evenementHtml = `
+                        <div class="col-lg-4 col-md-4 col-sm-6">
+                            <div class="blog__item">
+                                <div class="blog__item__pic">
+                                    <img src="{{asset('front/img/blog/blog-1.jpg')}}" alt="">
+                                </div>
+                                <div class="blog__item__text">
+                                    <ul>
+                                        <li><i class="fa fa-calendar-o px-2"></i>${evenement.date}</li>
+                                        <li><i class="fa fa-comment-o px-2 "></i> ${evenement.nbPlace} Places left</li>
+                                    </ul>
+                                    <h5><a href="#">${evenement.libelle}</a></h5>
+                                    <h3>${evenement.duree} hours hosted at ${evenement.emplacement}</h3>
+                                    <p>${evenement.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    console.log(evenementHtml);
+                    $('#searchResults').append(evenementHtml);
+                });
+            } else {
+                // If no events found, append a message to the searchResults div
+                $('#searchResults').append('<div>no events found</div>');
+            }
+
+            $('#searchResults').show(); // Show the search results
+            
+        }
+    });
+});
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
 

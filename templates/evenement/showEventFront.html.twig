@@ -1,0 +1,35 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}Evenements Details{% endblock %}
+     
+{% block body %}
+    <h1>Evenements Details</h1>
+
+<div class="row">
+       
+           
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic">
+                            <img src="{{asset('front/img/blog/blog-1.jpg')}}" alt="">
+                        </div>
+                        <div class="blog__item__text">
+                            <ul>
+                                <li><i class="fa fa-calendar-o px-2"></i>{{ evenement.date }}</li>
+                                <li><i class="fa fa-comment-o px-2 "></i> {{ evenement.nbPlace }} Places left</li>
+                            </ul>
+                            <h5><a href="#">{{ evenement.libelle }}</a></h5>
+                            <h3>{{ evenement.duree }} hours hosted at {{ evenement.emplacement }}</h3>
+                            <p>{{ evenement.description }}</p>
+                            <div class="img-fluid"><img style="min-width: 20%;" src="{{ qrCodes['simple'] }}" /></div>
+                            <div> <a href="{{path('showEventFront',{'id':evenement.id})}}"><button class="btn btn-primary">Order now </button></a></div>
+                        </div>
+                    </div>
+                </div>
+                
+      
+        </div>
+   
+{% endblock %}
+
+

@@ -26,6 +26,9 @@
         <div>
         <h2>Comment :{{c.idcom}}</h2>
         <h2>Contenu:{{c.contenu}}</h2>
+        <a href="{{path('commentLike',{'idcom':c.idcom})}}"><button class="btn btn-primary">{{c.nblike}} Likes</button></a>
+        <a href="{{path('commentDisLike',{'idcom':c.idcom})}}"><button class="btn btn-primary">{{c.nbdislike}} Dislikes</button></a>
+
         <h4>{{c.date? c.date|date('Y-m-d') : '' }}</h4>
         {% endfor %}
         <div>
