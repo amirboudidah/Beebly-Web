@@ -41,26 +41,75 @@ class PropositionlivreRepository extends ServiceEntityRepository
     /**
      * @return Propositionlivre[] Returns an array of Propositionlivre objects
      */
-    public function findNonTreated(): array
+    public function findNonTreated(String $parameter): array
     {
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
-        return  $this->getEntityManager()
-            ->createQuery("select p from App\Entity\Propositionlivre p LEFT JOIN 
-                    App\Entity\Estimationoffrelivre e WITH  p.idpropositionlivre = e.idproposition 
-                     WHERE e.idproposition IS NULL")
+        return   $this->getEntityManager()->createQueryBuilder()
+            ->select('p')
+            ->from('App\Entity\Propositionlivre', 'p')
+            ->leftJoin('App\Entity\Estimationoffrelivre', 'e', 'WITH', 'p.idpropositionlivre = e.idproposition')
+            ->where('e.idproposition IS NULL')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('p.idpropositionlivre', ':searchTerm'),
+                    $qb->expr()->like('p.titrelivre', ':searchTerm'),
+                    $qb->expr()->like('p.editon', ':searchTerm'),
+                    $qb->expr()->like('p.dateproposition', ':searchTerm'),
+                    $qb->expr()->like('p.descriptionetat', ':searchTerm')
+                )
+            )
+            ->setParameter('searchTerm', '%'.$parameter.'%')
+            ->getQuery()
             ->getResult();
    }
     /**
      * @return Propositionlivre[] Returns an array of Propositionlivre objects
      */
-    public function findTreated(): array
+    public function findTreated(String $parameter): array
     {
-
-        return  $this->getEntityManager()
-            ->createQuery("select p from App\Entity\Propositionlivre p INNER JOIN 
-                    App\Entity\Estimationoffrelivre e WITH  p.idpropositionlivre = e.idproposition ")
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        return $this->getEntityManager()->createQueryBuilder()
+        ->select('p')
+            ->from('App\Entity\Propositionlivre', 'p')
+            ->join('App\Entity\Estimationoffrelivre', 'e', 'WITH', 'p.idpropositionlivre = e.idproposition')
+            ->Where(
+                $qb->expr()->orX(
+                    $qb->expr()->like('p.idpropositionlivre', ':searchTerm'),
+                    $qb->expr()->like('p.titrelivre', ':searchTerm'),
+                    $qb->expr()->like('p.editon', ':searchTerm'),
+                    $qb->expr()->like('p.dateproposition', ':searchTerm'),
+                    $qb->expr()->like('p.descriptionetat', ':searchTerm')
+                )
+            )
+            ->setParameter('searchTerm', '%'.$parameter.'%')
+            ->getQuery()
             ->getResult();
     }
+    /**
+     * @return Propositionlivre[] Returns an array of Propositionlivre objects
+     */
+    public function findAllPropositions(String $parameter): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('p')
+            ->from('App\Entity\Propositionlivre', 'p')
+            ->Where(
+                $qb->expr()->orX(
+                    $qb->expr()->like('p.idpropositionlivre', ':searchTerm'),
+                    $qb->expr()->like('p.titrelivre', ':searchTerm'),
+                    $qb->expr()->like('p.editon', ':searchTerm'),
+                    $qb->expr()->like('p.dateproposition', ':searchTerm'),
+                    $qb->expr()->like('p.descriptionetat', ':searchTerm')
+                )
+            )
+            ->setParameter('searchTerm', '%'.$parameter.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
 //    /**
 //     * @return Propositionlivre[] Returns an array of Propositionlivre objects

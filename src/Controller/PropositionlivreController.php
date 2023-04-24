@@ -30,15 +30,17 @@ class PropositionlivreController extends AbstractController
             if($request->get('check')=='not-treated')
                 $propositionlivres = $entityManager
                     ->getRepository(Propositionlivre::class)
-                    ->findNonTreated();
-            elseif ($request->get('check')=='treated')
+                    ->findNonTreated($request->get('search15'));
+
+        elseif ($request->get('check')=='treated')
                 $propositionlivres = $entityManager
                     ->getRepository(Propositionlivre::class)
-                    ->findTreated();
-            elseif ($request->get('check')=='all')
+                    ->findTreated($request->get('search15'));
+
+        elseif ($request->get('check')=='all')
                 $propositionlivres = $entityManager
                     ->getRepository(Propositionlivre::class)
-                    ->findAll();
+                    ->findAllPropositions($request->get('search15'));
 
 
 

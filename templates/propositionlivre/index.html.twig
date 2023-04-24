@@ -3,10 +3,13 @@
 {% block title %}Propositionlivre index{% endblock %}
 
 {% block body %}
+
     <a href="{{ path('app_propositionlivre_new') }}">Create new</a>
 
     <h1>Propositionlivre index</h1>
     <form id="filters">
+        <input type="text"  placeholder="Search..." name="search15">
+
         <p>Filtrer</p>
         <p><input type="radio" name="check" value="all" id="all" checked> <label for="all">Select all </label></p>
         <p><input type="radio" name="check" value="not-treated" id="not-treated" > <label for="not-treated">Not-treated </label></p>

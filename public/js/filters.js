@@ -1,9 +1,15 @@
+
+
+
 window.onload = () => {
+
     const FiltersForm = document.querySelector("#filters");
+
+
 
     // On boucle sur les input
     document.querySelectorAll("#filters input").forEach(input => {
-        input.addEventListener("change", () => {
+        input.addEventListener("input", () => {
             console.log("yes");
 
             const Form = new FormData(FiltersForm);
@@ -39,3 +45,8 @@ window.onload = () => {
 
 
         }
+
+
+function doThing(){
+    alert('Horray! Someone wrote "' + this.value + '"!');
+}
