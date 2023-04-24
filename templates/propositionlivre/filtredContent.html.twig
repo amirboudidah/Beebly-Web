@@ -1,0 +1,31 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Idpropositionlivre</th>
+        <th>Titrelivre</th>
+        <th>Editon</th>
+        <th>Dateproposition</th>
+        <th>Descriptionetat</th>
+        <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for propositionlivre in propositionlivres %}
+        <tr>
+            <td>{{ propositionlivre.idpropositionlivre }}</td>
+            <td>{{ propositionlivre.titrelivre }}</td>
+            <td>{{ propositionlivre.editon }}</td>
+            <td>{{ propositionlivre.dateproposition ? propositionlivre.dateproposition|date('Y-m-d') : '' }}</td>
+            <td>{{ propositionlivre.descriptionetat }}</td>
+            <td>
+                <a href="{{ path('app_propositionlivre_show', {'idpropositionlivre': propositionlivre.idpropositionlivre}) }}">show</a>
+                <a href="{{ path('app_estimationoffrelivre_new', {'idpropositionlivre': propositionlivre.idpropositionlivre}) }}">Proposer une estimation</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

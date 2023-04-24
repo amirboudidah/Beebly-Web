@@ -38,6 +38,29 @@ class PropositionlivreRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    /**
+     * @return Propositionlivre[] Returns an array of Propositionlivre objects
+     */
+    public function findNonTreated(): array
+    {
+
+        return  $this->getEntityManager()
+            ->createQuery("select p from App\Entity\Propositionlivre p LEFT JOIN 
+                    App\Entity\Estimationoffrelivre e WITH  p.idpropositionlivre = e.idproposition 
+                     WHERE e.idproposition IS NULL")
+            ->getResult();
+   }
+    /**
+     * @return Propositionlivre[] Returns an array of Propositionlivre objects
+     */
+    public function findTreated(): array
+    {
+
+        return  $this->getEntityManager()
+            ->createQuery("select p from App\Entity\Propositionlivre p INNER JOIN 
+                    App\Entity\Estimationoffrelivre e WITH  p.idpropositionlivre = e.idproposition ")
+            ->getResult();
+    }
 
 //    /**
 //     * @return Propositionlivre[] Returns an array of Propositionlivre objects
@@ -63,4 +86,6 @@ class PropositionlivreRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
 }

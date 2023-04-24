@@ -12,16 +12,43 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 #[Route('/propositionlivre')]
 class PropositionlivreController extends AbstractController
 {
-    #[Route('/', name: 'app_propositionlivre_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/liste', name: 'app_propositionlivre_index', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         $propositionlivres = $entityManager
             ->getRepository(Propositionlivre::class)
             ->findAll();
+
+
+        if($request->get('ajax')){
+            if($request->get('check')=='not-treated')
+                $propositionlivres = $entityManager
+                    ->getRepository(Propositionlivre::class)
+                    ->findNonTreated();
+            elseif ($request->get('check')=='treated')
+                $propositionlivres = $entityManager
+                    ->getRepository(Propositionlivre::class)
+                    ->findTreated();
+            elseif ($request->get('check')=='all')
+                $propositionlivres = $entityManager
+                    ->getRepository(Propositionlivre::class)
+                    ->findAll();
+
+
+
+
+                return new JsonResponse([
+                'content' => $this->renderView('propositionlivre/filtredContent.html.twig',
+                    compact('propositionlivres'))
+            ]);
+        }
+
 
         return $this->render('propositionlivre/index.html.twig', [
             'propositionlivres' => $propositionlivres,
@@ -71,7 +98,7 @@ class PropositionlivreController extends AbstractController
         ]);
     }
 
-    #[Route('/{idpropositionlivre}', name: 'app_propositionlivre_show', methods: ['GET'])]
+  #[Route('/{idpropositionlivre}', name: 'app_propositionlivre_show', methods: ['GET'])]
     public function show(Propositionlivre $propositionlivre): Response
     {
         return $this->render('propositionlivre/show.html.twig', [

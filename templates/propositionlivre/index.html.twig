@@ -3,39 +3,27 @@
 {% block title %}Propositionlivre index{% endblock %}
 
 {% block body %}
-    <h1>Propositionlivre index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Idpropositionlivre</th>
-                <th>Titrelivre</th>
-                <th>Editon</th>
-                <th>Dateproposition</th>
-                <th>Descriptionetat</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for propositionlivre in propositionlivres %}
-            <tr>
-                <td>{{ propositionlivre.idpropositionlivre }}</td>
-                <td>{{ propositionlivre.titrelivre }}</td>
-                <td>{{ propositionlivre.editon }}</td>
-                <td>{{ propositionlivre.dateproposition ? propositionlivre.dateproposition|date('Y-m-d') : '' }}</td>
-                <td>{{ propositionlivre.descriptionetat }}</td>
-                <td>
-                    <a href="{{ path('app_propositionlivre_show', {'idpropositionlivre': propositionlivre.idpropositionlivre}) }}">show</a>
-                    <a href="{{ path('app_estimationoffrelivre_new', {'idpropositionlivre': propositionlivre.idpropositionlivre}) }}">Proposer une estimation</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
     <a href="{{ path('app_propositionlivre_new') }}">Create new</a>
+
+    <h1>Propositionlivre index</h1>
+    <form id="filters">
+        <p>Filtrer</p>
+        <p><input type="radio" name="check" value="all" id="all" checked> <label for="all">Select all </label></p>
+        <p><input type="radio" name="check" value="not-treated" id="not-treated" > <label for="not-treated">Not-treated </label></p>
+        <p><input type="radio" name="check" value="treated" id="treated" > <label for="treated">Treated </label></p>
+    </form>
+
+
+    <div class="grix xs1 sm5 gutter-0 card">
+        <div class="col-xs1">
+
+        </div>
+        <div class="col-xs1 col-sm4" id="content">
+            {% include "propositionlivre/filtredContent.html.twig" %}
+        </div>
+    </div>
+
+    {% block js %}
+        <script src="{{ asset('js/filters.js') }}"></script>
+    {% endblock %}
 {% endblock %}
