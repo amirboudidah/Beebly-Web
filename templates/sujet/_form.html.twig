@@ -1,0 +1,32 @@
+{{ form_start(form, {attr: {novalidate: 'novalidate'}})}}
+   <table class="pt-5">
+         <tr>
+    <td>{{form_label(form.titresujet,"Titre")}}</td>
+    
+    <td>{{form_widget(form.titresujet,{ 'attr': {'class': 'form-control'} })}}</td>
+    
+    <td>{{form_errors(form.titresujet)}}</td>
+   </tr>
+
+         <tr>
+    <td>{{form_label(form.contenu,"contenu")}}</td>
+    
+    <td>{{form_widget(form.contenu,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.contenu)}}</td>
+   </tr>
+            <tr>
+    <td>{{form_label(form.date,"Date")}}</td>
+    
+    <td>{{form_widget(form.date,{ 'attr': {'class': 'form-control my-2'} })}}</td>
+    
+    <td>{{form_errors(form.date)}}</td>
+   </tr>
+
+   </table>
+   
+    {{ form_widget(form) }}
+    <div class="d-flex justify-content-center my-2">
+    <button class="btn btn-primary">{{ button_label|default('Add') }}</button>
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,15 @@
+
+<form id="searchForm" action="{{ path('eventSearch') }}" method="get">
+    <select id="searchType" name="searchType">
+        <option value="type">Type</option>
+        <option value="prix">Prix</option>
+        <option value="idEvenement">ID Evenement</option>
+    </select>
+    <input id="searchValue" type="text" name="searchValue" />
+    <button type="submit">Search</button>
+</form>
+
+<div id="searchResults">
+    <!-- Search results will be displayed here -->
+</div>
+

@@ -1,0 +1,11 @@
+{% extends 'templateFront.html.twig' %}
+
+{% block title %}New Sujet{% endblock %}
+
+{% block body %}
+    <h1>Create new Sujet</h1>
+<div class="container pt-5">
+    {{ include('sujet/_form.html.twig') }}
+</div>
+    <a href="{{ path('app_sujet_index') }}">back to list</a>
+{% endblock %}

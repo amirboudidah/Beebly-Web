@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Dislikee;
+
+use App\Entity\Likee;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[Route('/commentaire')]
 class CommentaireController extends AbstractController
 {
@@ -33,6 +38,7 @@ class CommentaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            dd($commentaire);
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
@@ -51,6 +57,53 @@ class CommentaireController extends AbstractController
         return $this->render('commentaire/show.html.twig', [
             'commentaire' => $commentaire,
         ]);
+    }
+
+    #[Route('/commentLike/{idcom}', name: 'commentLike', methods: ['GET'])]
+    public function commentLike(Commentaire $commentaire,SessionInterface $session, EntityManagerInterface $entityManager): Response
+    {
+        $id =$session->get('id');
+        if ($id!= null){
+            $user = $entityManager
+            ->getRepository(User::class)
+            ->find($id);
+        $like = new Likee();
+        $like->setIdCommentaire($commentaire);
+        $like->setIduser($user);
+        $entityManager->persist($like);
+        $entityManager->flush();
+        $commentaire->setNblike($commentaire->getNblike()+1);
+        $entityManager->persist($commentaire);
+        $entityManager->flush();
+            
+            return $this->redirectToRoute('topicFront', [], Response::HTTP_SEE_OTHER);
+
+    }else{
+        return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
+    }
+    }
+
+    #[Route('/commentDisLike/{idcom}', name: 'commentDisLike', methods: ['GET'])]
+    public function commentDisLike(Commentaire $commentaire,SessionInterface $session, EntityManagerInterface $entityManager): Response
+    {
+        $id =$session->get('id');
+        if ($id!= null){
+            $user = $entityManager
+            ->getRepository(User::class)
+            ->find($id);
+        $dislike = new Dislikee();
+        $dislike->setIdCommentaire($commentaire);
+        $dislike->setIduser($user);
+        $entityManager->persist($dislike);
+            $entityManager->flush();
+            $commentaire->setNbdislike($commentaire->getNbdislike()+1);
+        $entityManager->persist($commentaire);
+        $entityManager->flush();
+            return $this->redirectToRoute('topicFront', [], Response::HTTP_SEE_OTHER);
+
+    }else{
+        return $this->redirectToRoute('app_user_signin', [], Response::HTTP_SEE_OTHER);
+    }
     }
 
     #[Route('/{idcom}/edit', name: 'app_commentaire_edit', methods: ['GET', 'POST'])]
