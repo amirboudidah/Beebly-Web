@@ -17,9 +17,62 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[Route('/reclamation')]
 class ReclamationController extends AbstractController
 {
+    #[Route('/dashboardRecl', name: 'app_reclamation_dashboard', methods: ['GET'])]
+    public function dashboardRec(EntityManagerInterface $entityManager): Response
+    {
+        // Create a DQL query
+$dqlStatusLivre = "
+    SELECT COUNT(r) as recCount
+    FROM App\Entity\Reclamation r
+    WHERE r.type = :type
+";
+// Execute the DQL query
+$query = $entityManager->createQuery($dqlStatusLivre)
+->setParameter('type', 'Livre');
+
+// Get the results
+$results = $query->getResult();
+$recCountLivre=$results[0]['recCount'];
+
+       // Create a DQL query
+       $dqlStatusAutre = "
+       SELECT COUNT(r) as recAutreCount
+       FROM App\Entity\Reclamation r
+       WHERE r.type = :type
+   ";
+   // Execute the DQL query
+   $query = $entityManager->createQuery($dqlStatusAutre)
+   ->setParameter('type', 'Autre');
+   
+   // Get the results
+   $results = $query->getResult();
+   $recAutreCount=$results[0]['recAutreCount'];
+   
+
+   
+       // Create a DQL query
+       $dqlStatusLivraison = "
+       SELECT COUNT(r) as recAutreCount
+       FROM App\Entity\Reclamation r
+       WHERE r.type = :type
+   ";
+   // Execute the DQL query
+   $query = $entityManager->createQuery($dqlStatusLivraison)
+   ->setParameter('type', 'Livraison');
+   
+   // Get the results
+   $results = $query->getResult();
+   $recCountLivraison=$results[0]['recAutreCount'];
+   
+        return $this->render('reclamation/reclamationDashboard.html.twig', [
+            'recCountLivre' => $recCountLivre,
+            'recAutreCount' => $recAutreCount,
+            'recCountLivraison' => $recCountLivraison,
+
+        ]);
+    }
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager
-    ): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
         $reclamations = $entityManager
             ->getRepository(Reclamation::class)
@@ -82,6 +135,7 @@ class ReclamationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $reclamation->setIdUser($user);
             $reclamation->setDate(new \DateTime());
+            $reclamation->setStatus('Non traité');
             $entityManager->persist($reclamation);
             $entityManager->flush();
 

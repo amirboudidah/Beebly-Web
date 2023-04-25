@@ -3,12 +3,14 @@
 namespace App\Controller;
 use App\Entity\Reclamation;
 use App\Entity\Reponse;
+use App\Entity\User;
 use App\Form\ReponseType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twilio\Rest\Client;
 
 #[Route('/reponse')]
 class ReponseController extends AbstractController
@@ -36,10 +38,34 @@ class ReponseController extends AbstractController
             $reclamation = $entityManager
             ->getRepository(Reclamation::class)
             ->find($id);
+            $user = $entityManager
+            ->getRepository(User::class)
+            ->find($reclamation->getIdUser());
             $entityManager->persist($reponse);
             $entityManager->flush();
             $reclamation->setIdReponse($reponse);
+            $reclamation->setStatus('Traité');
+          //here
           
+        // Replace with your Twilio account SID, auth token, and Twilio phone number
+        $twilioAccountSid = 'ACd476e6133d3fa563ae799674f3a7008b';
+        $twilioAuthToken = 'c1c8f9ad898bee94e2e8686dcd598167';
+        $twilioPhoneNumber = '+16813396798';
+
+        // Create a Twilio client instance
+        $twilioClient = new Client($twilioAccountSid, $twilioAuthToken);
+
+
+        $phoneNumber="+21650730142";
+        // Send SMS using Twilio
+        $message = $twilioClient->messages->create(
+            $phoneNumber, // recipient's phone number
+            [
+                'from' => $twilioPhoneNumber, // your Twilio phone number
+                'body' => 'New reponses added to your reclamation please check it'// SMS body
+            ]
+        );
+        
             $entityManager->persist($reclamation);
             $entityManager->flush();
 

@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Ticket
  *
- * @ORM\Table(name="ticket", indexes={@ORM\Index(name="id_evenement", columns={"id_evenement"})})
+ * @ORM\Table(name="ticket", indexes={@ORM\Index(name="idEvenement", columns={"idEvenement"})})
  * @ORM\Entity
  */
 class Ticket
@@ -49,9 +49,12 @@ class Ticket
     private $type;
 
     /**
-     * @var int
+     * @var \Evenement
      *
-     * @ORM\Column(name="id_evenement", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Evenement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idEvenement", referencedColumnName="id")
+     * })
      */
     private $idEvenement;
 
@@ -84,12 +87,12 @@ class Ticket
         return $this;
     }
 
-    public function getIdEvenement(): ?int
+    public function getIdEvenement(): ?Evenement
     {
         return $this->idEvenement;
     }
 
-    public function setIdEvenement(int $idEvenement): self
+    public function setIdEvenement(Evenement $idEvenement): self
     {
         $this->idEvenement = $idEvenement;
 

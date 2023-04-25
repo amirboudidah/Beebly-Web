@@ -13,7 +13,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[Route('/sujet')]
@@ -77,7 +81,7 @@ class SujetController extends AbstractController
     }
 
     #[Route('/frontSujet/{idsujet}', name: 'frontSujet', methods: ['GET', 'POST'])]
-    public function frontSujet(Request $request,Sujet $sujet,EntityManagerInterface $entityManager,SessionInterface $session): Response
+    public function frontSujet(MailerInterface $maileer,Request $request,Sujet $sujet,EntityManagerInterface $entityManager,SessionInterface $session): Response
     {
         $commentaire = new Commentaire();
         $form = $this->createForm(CommentaireType::class, $commentaire);
@@ -96,8 +100,43 @@ class SujetController extends AbstractController
             $commentaire->setIduser($user);
             $commentaire->setNbdislike(0);
             $commentaire->setNblike(0);
+            $containsBadWord = $this->checkBadWord($commentaire->getContenu());
+
+        if ($containsBadWord) {
+            // Do something with the bad word
+           
+            
+
+            $transport = Transport::fromDsn("smtp://pidev.beebly@gmail.com:bwukvzhiqbpwyrdc@smtp.gmail.com:587?encryption=tls");
+            $mailer = new Mailer($transport);
+           $emailTo = "pidev.beebly@gmail.com";//$terrain->getIdPartenaire()->getEmail() ;
+            $email = (new Email())
+       
+            ->from('pidev.beebly@gmail.com')
+            ->to($emailTo)
+            ->subject('Bad Word Notification!')
+            ->text('Sending emails is fun again!')
+            ->html('
+            
+                <h1>Bad Word Notification</h1>
+                <p>Dear'. $user->getNom() .',</p>
+                <p>We have detected that you used a bad word in your message on our website. This is not allowed as per our community guidelines.</p>
+                <p>Please refrain from using inappropriate language in your future messages.</p>
+                <p>Thank you for your cooperation.</p>
+                <p>Sincerely,<br>Beebly Team</p>
+           ');   
+        
+
+$headers = $email->getHeaders();
+
+$mailer->send($email);
+
+        } else {
+            
             $entityManager->persist($commentaire);
             $entityManager->flush();
+        }
+
 
             return $this->redirectToRoute('topicFront', [], Response::HTTP_SEE_OTHER);
         }
@@ -137,4 +176,18 @@ class SujetController extends AbstractController
 
         return $this->redirectToRoute('app_sujet_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    public function checkBadWord(string $word): bool
+    {
+        $badWords = ['Badword1', 'Badword2', 'Badword3']; 
+
+        foreach ($badWords as $badWord) {
+            if (stripos($word, $badWord) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

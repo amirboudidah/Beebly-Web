@@ -20,19 +20,14 @@ class ReclamationType extends AbstractType
             //->add('photo')
             ->add('type',ChoiceType::class, [
                 'choices' => [
-                    'Help' => 'Help',
-                    'FeedBack' => 'Feedback',
+                    'Livre' => 'Livre',
+                    'Livraison' => 'Livraison',
+                    'Autre' => 'Autre',
 
                 ],
                 'label' => 'Select your status',
             ])
-            ->add('status',ChoiceType::class, [
-                'choices' => [
-                    'Traité' => 'Traité',
-                    'Non Traité' => 'non Traité',
-                ],
-                'label' => 'Select your status',
-            ])
+           
             
         ;
     }

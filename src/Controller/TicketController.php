@@ -19,7 +19,7 @@ class TicketController extends AbstractController
         $tickets = $entityManager
             ->getRepository(Ticket::class)
             ->findAll();
-
+        
         return $this->render('ticket/index.html.twig', [
             'tickets' => $tickets,
         ]);
@@ -29,6 +29,7 @@ class TicketController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $ticket = new Ticket();
+       
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
 

@@ -88,7 +88,7 @@ class Reclamation
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=20, nullable=false)
-     * @Assert\NotBlank(message="status cannot be null")
+     * 
      */
     private $status;
 
