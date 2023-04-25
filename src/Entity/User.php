@@ -2,221 +2,171 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * User
- *
- * @ORM\Table(name="user")
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
-
- */
-class User
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=25, nullable=false)
-     * @Assert\NotBlank(message="Remplir ce champ")
-     * 
+     * @var string The hashed password
      */
+    #[ORM\Column]
+    private ?string $password = null;
 
-    private $nom;
+    #[ORM\ManyToMany(targetEntity: Livre::class, mappedBy: 'favoris')]
+    private Collection $livres;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prenom", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * 
-     */
-    private $prenom;
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Livre::class)]
+    private Collection $livs;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="adrmail", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * @Assert\Email
-     */
-    private $adrmail;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mdp", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * 
-     */
-    private $mdp;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="adresse", type="string", length=100, nullable=false)
-     * @Assert\NotBlank
-     * 
-     */
-    private $adresse;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tel", type="string", length=25, nullable=false)
-     * @Assert\NotBlank
-     * 
-     */
-    private $tel;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=6, nullable=false)
-     * 
-     */
-    private $type;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cin", type="integer", nullable=false)
-     * @Assert\NotBlank
-     * 
-     */
-    private $cin;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="soldepoint", type="integer", nullable=false)
-     * 
-     */
-    private $soldepoint;
+    public function __construct()
+    {
+        $this->livres = new ArrayCollection();
+        $this->livs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getEmail(): ?string
     {
-        return $this->nom;
+        return $this->email;
     }
 
-    public function setNom(string $nom): self
+    public function setEmail(string $email): self
     {
-        $this->nom = $nom;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getPrenom(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->prenom;
+        return (string) $this->email;
     }
 
-    public function setPrenom(string $prenom): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->prenom = $prenom;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getAdrmail(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->adrmail;
+        return $this->password;
     }
 
-    public function setAdrmail(string $adrmail): self
+    public function setPassword(string $password): self
     {
-        $this->adrmail = $adrmail;
+        $this->password = $password;
 
         return $this;
     }
 
-    public function getMdp(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        return $this->mdp;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
-    public function setMdp(string $mdp): self
+    /**
+     * @return Collection<int, Livre>
+     */
+    public function getLivres(): Collection
     {
-        $this->mdp = $mdp;
+        return $this->livres;
+    }
+
+    public function addLivre(Livre $livre): self
+    {
+        if (!$this->livres->contains($livre)) {
+            $this->livres->add($livre);
+            $livre->addFavori($this);
+        }
 
         return $this;
     }
 
-    public function getAdresse(): ?string
+    public function removeLivre(Livre $livre): self
     {
-        return $this->adresse;
-    }
-
-    public function setAdresse(string $adresse): self
-    {
-        $this->adresse = $adresse;
+        if ($this->livres->removeElement($livre)) {
+            $livre->removeFavori($this);
+        }
 
         return $this;
     }
 
-    public function getTel(): ?string
+    /**
+     * @return Collection<int, Livre>
+     */
+    public function getLivs(): Collection
     {
-        return $this->tel;
+        return $this->livs;
     }
 
-    public function setTel(string $tel): self
+    public function addLiv(Livre $liv): self
     {
-        $this->tel = $tel;
+        if (!$this->livs->contains($liv)) {
+            $this->livs->add($liv);
+            $liv->setUsers($this);
+        }
 
         return $this;
     }
 
-    public function getType(): ?string
+    public function removeLiv(Livre $liv): self
     {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
+        if ($this->livs->removeElement($liv)) {
+            // set the owning side to null (unless already changed)
+            if ($liv->getUsers() === $this) {
+                $liv->setUsers(null);
+            }
+        }
 
         return $this;
     }
-
-    public function getCin(): ?int
-    {
-        return $this->cin;
-    }
-
-    public function setCin(int $cin): self
-    {
-        $this->cin = $cin;
-
-        return $this;
-    }
-
-    public function getSoldepoint(): ?int
-    {
-        return $this->soldepoint;
-    }
-
-    public function setSoldepoint(int $soldepoint): self
-    {
-        $this->soldepoint = $soldepoint;
-
-        return $this;
-    }
-
-
 }

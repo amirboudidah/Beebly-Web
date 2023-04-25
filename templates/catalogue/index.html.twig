@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livre index{% endblock %}
+
+{% block body %}
+    <head>
+        <title><div class="latest-product__text">
+            <h4>Latest Edition</h4>
+            </div>
+
+            <div class="col-lg-4 col-md-3">
+            <div class="filter__option">
+            <span class="icon_grid-2x2"></span>
+            <span class="icon_ul"></span>
+            </div>
+            </div></title>
+
+
+
+    </head>
+
+            {% for livre in livres %}
+
+
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="product__item">
+            <div class="product__item__pic set-bg" >
+                <img src= "{{ asset('uploads/'~ livre.image )}}" width="70%" alt="" />
+
+                <ul class="product__item__pic__hover">
+                    <li><a href="{{ path('panier_add',{'id':livre.id}) }}"><i class="fa fa-shopping-cart"></i></a></li>
+                </ul>
+            </div>
+         {#   <div class="txt-red">
+                {% if is_granted("ROLE_USER") %}
+                    {% set isFavorite = false %}
+                    {% for favoris in livre.favoris %}
+                        {% if favoris.id == app.user.id %}
+                            {% set isFavorite = true %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if isFavorite %}
+                        <a href="{{ path('livres_retrait_favoris', {id: livre.id}) }}"><i class="fas fa-heart"></i></a>
+                    {% else %}
+                        <a href="{{ path('livres_ajout_favoris', {id: livre.id}) }}"><i class="far fa-heart"></i></a>
+                    {% endif %}
+
+                {% else %}
+                    <i class="far fa-heart"></i>
+                {% endif %}
+
+            </div>
+         #}
+            <div class="product__item__text">
+                <h6><a href="{{ path('app_catalogue_show', {'id': livre.id}) }}">{{ livre.titre }}</a></h6>
+                <h5>{{ livre.prix }} Dinars</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+            {% else %}
+           <p>Aucun livre trouvé dans le catalogue</p>
+        {% endfor %}
+
+
+{% endblock %}
+

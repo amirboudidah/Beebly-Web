@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livres{% endblock %}
+
+{% block body %}
+    <h1>Livres</h1>
+
+    <div class="card" >
+        <img src= "{{ "asset('uploads/'~ livre.image )"}}" width="100%"  alt="" />
+
+        <div class="card-body">
+            <h5 class="card-title">{{ livre.titre }}</h5>
+            <p class="card-text">{{ livre.DescriptionEtatLivre }}</p>
+            <p class="card-text">{{ livre.categorie }}</p>
+            <p class="card-text">{{ livre.prix }} Dinars </p>
+            <a href="{{ path('app_catalogue_index') }}" class="btn btn-primary">Retour au catalogue</a>
+           {#  <button id="ajouter-favori" class="btn btn-primary">Ajouter aux favoris</button> #}
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+
+{% endblock %}

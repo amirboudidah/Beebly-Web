@@ -2,85 +2,59 @@
 
 namespace App\Entity;
 
+use App\Repository\LivreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Livre
- *
- * @ORM\Table(name="livre")
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: LivreRepository::class)]
 class Livre
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="idLivre", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $idlivre;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="titre", type="string", length=255, nullable=true, options={"default"="NULL"})
-     */
-    private $titre = 'NULL';
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $titre = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="categorie", type="string", length=255, nullable=true, options={"default"="NULL"})
-     */
-    private $categorie = 'NULL';
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $categorie = null;
 
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(name="datePublication", type="datetime", nullable=true, options={"default"="NULL"})
-     */
-    private $datepublication = 'NULL';
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $DatePublication = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="image", type="blob", length=65535, nullable=true, options={"default"="NULL"})
-     */
-    private $image = 'NULL';
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
-     */
-    private $description;
+    #[ORM\Column(nullable: true)]
+    private ?float $prix = null;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="prix", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $prix;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $DescriptionEtatLivre = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="descriptionEtatLivre", type="string", length=255, nullable=false)
-     */
-    private $descriptionetatlivre;
+    #[ORM\Column(nullable: true)]
+    private ?int $note = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="note", type="integer", nullable=false)
-     */
-    private $note;
+    #[ORM\OneToMany(mappedBy: 'livre', targetEntity: Item::class)]
+    private Collection $items;
 
-    public function getIdlivre(): ?int
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'livres')]
+    private Collection $favoris;
+
+    #[ORM\ManyToOne(inversedBy: 'livs')]
+    private ?User $users = null;
+
+    public function __construct()
     {
-        return $this->idlivre;
+        $this->items = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getTitre(): ?string
@@ -107,38 +81,26 @@ class Livre
         return $this;
     }
 
-    public function getDatepublication(): ?\DateTimeInterface
+    public function getDatePublication(): ?\DateTimeInterface
     {
-        return $this->datepublication;
+        return $this->DatePublication;
     }
 
-    public function setDatepublication(?\DateTimeInterface $datepublication): self
+    public function setDatePublication(?\DateTimeInterface $DatePublication): self
     {
-        $this->datepublication = $datepublication;
+        $this->DatePublication = $DatePublication;
 
         return $this;
     }
 
-    public function getImage()
+    public function getImage(): ?string
     {
         return $this->image;
     }
 
-    public function setImage($image): self
+    public function setImage(?string $image): self
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -148,21 +110,21 @@ class Livre
         return $this->prix;
     }
 
-    public function setPrix(float $prix): self
+    public function setPrix(?float $prix): self
     {
         $this->prix = $prix;
 
         return $this;
     }
 
-    public function getDescriptionetatlivre(): ?string
+    public function getDescriptionEtatLivre(): ?string
     {
-        return $this->descriptionetatlivre;
+        return $this->DescriptionEtatLivre;
     }
 
-    public function setDescriptionetatlivre(string $descriptionetatlivre): self
+    public function setDescriptionEtatLivre(?string $DescriptionEtatLivre): self
     {
-        $this->descriptionetatlivre = $descriptionetatlivre;
+        $this->DescriptionEtatLivre = $DescriptionEtatLivre;
 
         return $this;
     }
@@ -172,12 +134,78 @@ class Livre
         return $this->note;
     }
 
-    public function setNote(int $note): self
+    public function setNote(?int $note): self
     {
         $this->note = $note;
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
 
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+            $item->setLivre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getLivre() === $this) {
+                $item->setLivre(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(?User $favori): self
+    {
+        if ($favori && !$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(?User $favori): self
+    {
+        if ($favori) {
+            $this->favoris->removeElement($favori);
+        }
+
+        return $this;
+    }
+
+public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): self
+    {
+        $this->users = $users;
+
+        return $this;
+    }
 }
