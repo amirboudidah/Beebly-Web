@@ -29,6 +29,15 @@ class User
      * @ORM\Column(name="nom",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The name field is required.")
      * @Assert\Length(max=25, maxMessage="The name field cannot exceed {{ limit }} characters.")
+     * @Assert\Type(
+     *     type="String",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your name cannot contain a number"
+     * )
      */
     private $nom;
 
@@ -36,6 +45,15 @@ class User
      * @ORM\Column(name="prenom",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The first name field is required.")
      * @Assert\Length(max=25, maxMessage="The first name field cannot exceed {{ limit }} characters.")
+     * @Assert\Type(
+     *     type="String",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your name cannot contain a number"
+     * )
      */
     private $prenom;
 
@@ -63,7 +81,8 @@ class User
     /**
      * @ORM\Column(name="tel",type="string", length=25, nullable=true)
      * @Assert\NotBlank(message="The phone number field is required.")
-     * @Assert\Length(max=25, maxMessage="The phone number field cannot exceed {{ limit }} characters.")
+     * @Assert\Length(min=8,max=8,minMessage="The phone number field cannot exceed {{ limit }} characters.", maxMessage="The phone number field cannot exceed {{ limit }} characters.")
+     * @Assert\Positive
      */
     private $tel;
 
@@ -75,6 +94,12 @@ class User
     /**
      * @ORM\Column(name="cin",type="integer", nullable=true)
      * @Assert\NotBlank(message="The CIN field is required.")
+     * @Assert\Length(min=8,max=8,minMessage="The phone number field cannot exceed {{ limit }} characters.", maxMessage="The phone number field cannot exceed {{ limit }} characters.")
+     * @Assert\Type(
+     *     type="integer",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
+     * @Assert\Positive
      */
     private $cin;
 

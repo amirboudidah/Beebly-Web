@@ -55,5 +55,7 @@
    </table>
    
     {{ form_widget(form) }}
-    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+    <div class="d-flex justify-content-center my-2">
+    <button class="btn btn-primary">{{ button_label|default('save') }}</button>
+    </div>
 {{ form_end(form) }}

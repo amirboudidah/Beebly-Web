@@ -1,0 +1,16 @@
+{{ form_start(form, {attr: {novalidate: 'novalidate'}})}}
+   <table>
+         <tr>
+    <td>{{form_label(form.adrmail,"Email")}}</td>
+    
+    <td>{{form_widget(form.adrmail,{ 'attr': {'class': 'form-control'} })}}</td>
+    
+    <td>{{form_errors(form.adrmail)}}</td>
+   </tr>
+   </table>
+   
+    {{ form_widget(form) }}
+    <div class="d-flex justify-content-center my-2">
+    <button class="btn btn-primary">{{ button_label|default('send') }}</button>
+    </div>
+{{ form_end(form) }}
