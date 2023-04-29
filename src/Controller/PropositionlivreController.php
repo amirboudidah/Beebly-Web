@@ -70,6 +70,32 @@ class PropositionlivreController extends AbstractController
             'propositionlivres' => $propositionlivres,
         ]);
     }
+    #[Route('/statistique', name: 'show_my_statistique', methods: ['GET'])]
+    public function statistique(EntityManagerInterface $entityManager): Response
+    {
+
+
+
+
+
+        $propositionlivresStat = $entityManager
+            ->getRepository(Propositionlivre::class)->getStat(3,2023);
+
+
+        $dates = [];
+        $propositionCount = [];
+
+        foreach($propositionlivresStat as $propositionStat){
+            $dates[] = $propositionStat['dateproposition']->format('Y-m-d');
+
+            $propositionCount[] = $propositionStat[1];
+        }
+        return $this->render('propositionlivre/statistique.html.twig', [
+            'dates' => json_encode($dates),
+            'propositionCount' => json_encode($propositionCount),
+        ]);
+    }
+
 
     #[Route('/new', name: 'app_propositionlivre_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response

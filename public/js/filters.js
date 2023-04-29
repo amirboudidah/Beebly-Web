@@ -1,6 +1,4 @@
 
-
-
 window.onload = () => {
 
     const FiltersForm = document.querySelector("#filters");
@@ -47,6 +45,3 @@ window.onload = () => {
         }
 
 
-function doThing(){
-    alert('Horray! Someone wrote "' + this.value + '"!');
-}

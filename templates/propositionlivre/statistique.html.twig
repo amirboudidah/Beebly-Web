@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques index{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1>Statistiques</h1>
+        <canvas id="PropositionStat" width="400" height="100"></canvas>
+
+    </div>
+
+
+    {% block js %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+
+    {% endblock %}
+
+    {% block css %}
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
+
+    <!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="../asset/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+<link href="https://fonts.googleapis.com">
+<link href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Icons. Uncomment required icon fonts -->
+<link rel="stylesheet" href="{{asset('vendor/fonts/boxicons.css')}}" />
+
+
+
+    <!-- Core CSS -->
+<link rel="stylesheet" href="{{asset('vendor/css/core.css')}}"  class="template-customizer-core-css" />
+<link rel="stylesheet" href="{{asset('vendor/css/theme-default.css')}}" class="template-customizer-theme-css" />
+<link rel="stylesheet" href="{{asset('css/demo.css')}}"  />
+
+    <!-- Vendors CSS -->
+<link rel="stylesheet" href="{{asset('vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
+
+    <link rel="stylesheet" href="{{asset('vendor/libs/apex-charts/apex-charts.css')}}"/>
+    {% endblock %}
+
+    <script>
+
+        let proposition = document.querySelector("#PropositionStat");
+        let chart = new Chart(proposition, {
+            type: "line",
+            data: {
+                labels: {{ dates|raw }},
+                datasets: [{
+                    label: "Nombre de proposition",
+                    data: {{ propositionCount|raw }}
+                }]
+            },
+
+        })
+    </script>
+
+
+{% endblock %}

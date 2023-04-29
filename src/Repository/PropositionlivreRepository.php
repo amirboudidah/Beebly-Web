@@ -5,6 +5,9 @@ namespace App\Repository;
 use App\Entity\Propositionlivre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use DoctrineExtensions\Query\Mysql\Month;
+use DoctrineExtensions\Query\Mysql\Year;
+
 
 /**
  * @extends ServiceEntityRepository<Propositionlivre>
@@ -38,14 +41,15 @@ class PropositionlivreRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
     /**
      * @return Propositionlivre[] Returns an array of Propositionlivre objects
      */
-    public function findNonTreated(String $parameter): array
+    public function findNonTreated(string $parameter): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        return   $this->getEntityManager()->createQueryBuilder()
+        return $this->getEntityManager()->createQueryBuilder()
             ->select('p')
             ->from('App\Entity\Propositionlivre', 'p')
             ->leftJoin('App\Entity\Estimationoffrelivre', 'e', 'WITH', 'p.idpropositionlivre = e.idproposition')
@@ -59,18 +63,19 @@ class PropositionlivreRepository extends ServiceEntityRepository
                     $qb->expr()->like('p.descriptionetat', ':searchTerm')
                 )
             )
-            ->setParameter('searchTerm', '%'.$parameter.'%')
+            ->setParameter('searchTerm', '%' . $parameter . '%')
             ->getQuery()
             ->getResult();
-   }
+    }
+
     /**
      * @return Propositionlivre[] Returns an array of Propositionlivre objects
      */
-    public function findTreated(String $parameter): array
+    public function findTreated(string $parameter): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         return $this->getEntityManager()->createQueryBuilder()
-        ->select('p')
+            ->select('p')
             ->from('App\Entity\Propositionlivre', 'p')
             ->join('App\Entity\Estimationoffrelivre', 'e', 'WITH', 'p.idpropositionlivre = e.idproposition')
             ->Where(
@@ -82,14 +87,15 @@ class PropositionlivreRepository extends ServiceEntityRepository
                     $qb->expr()->like('p.descriptionetat', ':searchTerm')
                 )
             )
-            ->setParameter('searchTerm', '%'.$parameter.'%')
+            ->setParameter('searchTerm', '%' . $parameter . '%')
             ->getQuery()
             ->getResult();
     }
+
     /**
      * @return Propositionlivre[] Returns an array of Propositionlivre objects
      */
-    public function findAllPropositions(String $parameter): array
+    public function findAllPropositions(string $parameter): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         return $this->getEntityManager()->createQueryBuilder()
@@ -104,10 +110,30 @@ class PropositionlivreRepository extends ServiceEntityRepository
                     $qb->expr()->like('p.descriptionetat', ':searchTerm')
                 )
             )
-            ->setParameter('searchTerm', '%'.$parameter.'%')
+            ->setParameter('searchTerm', '%' . $parameter . '%')
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return void Returns a stat
+     */
+    public function getStat(int $month, int $year): array
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('COUNT(p.idpropositionlivre)', 'p.dateproposition')
+            ->from('App\Entity\Propositionlivre', 'p')
+            ->where($queryBuilder->expr()->eq('month(p.dateproposition)', ':month'))
+            ->andWhere($queryBuilder->expr()->eq('year(p.dateproposition)', ':year'))
+            ->groupBy('p.dateproposition')
+            ->orderBy('p.dateproposition')
+            ->setParameter('month', $month)
+            ->setParameter('year', $year);
+        $query = $queryBuilder->getQuery();
+        return $query->getResult();
+    }
+}
+
 
 
 
@@ -137,4 +163,4 @@ class PropositionlivreRepository extends ServiceEntityRepository
 //    }
 
 
-}
+

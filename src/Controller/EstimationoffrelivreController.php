@@ -10,10 +10,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twilio\Rest\Client;
+use Twilio\Exceptions\TwilioException;
 
 #[Route('/estimationoffrelivre')]
 class EstimationoffrelivreController extends AbstractController
 {
+
+    public function SendSMS(string $to, string $message)
+    {
+        $sid = 'AC39fa940bdd1be4d3294e6cb4f449bbba';
+        $token = '669aad4fcdc1d184e435ab3930193822';
+        $twilioNumber = '+15672352667';
+
+        $client = new Client($sid, $token);
+
+        try {
+            $client->messages->create(
+                $to,
+                [
+                    'from' => $twilioNumber,
+                    'body' => $message,
+                ]
+            );
+        } catch (TwilioException $e) {
+            // Handle Twilio exception here
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
     #[Route('/', name: 'app_estimationoffrelivre_index', methods: ['GET'])]
     public function index(EstimationoffrelivreRepository $estimationoffrelivreRepository): Response
     {
@@ -42,9 +66,12 @@ class EstimationoffrelivreController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $estimationoffrelivre->setIdproposition($propositionlivre);
             $estimationoffrelivre->setEtat('En_attente');
-
-
             $estimationoffrelivreRepository->save($estimationoffrelivre, true);
+
+            $to = '+21628168997';
+            $message = 'A new response has been added to your complaint. Please check your account for more information.' ;
+            $this->SendSMS($to, $message);
+
 
             return $this->redirectToRoute('app_estimationoffrelivre_index', [], Response::HTTP_SEE_OTHER);
         }
