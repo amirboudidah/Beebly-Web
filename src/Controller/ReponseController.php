@@ -49,7 +49,7 @@ class ReponseController extends AbstractController
           
         // Replace with your Twilio account SID, auth token, and Twilio phone number
         $twilioAccountSid = 'ACd476e6133d3fa563ae799674f3a7008b';
-        $twilioAuthToken = 'c1c8f9ad898bee94e2e8686dcd598167';
+        $twilioAuthToken = '9a5f7f264e607bfc4db865f83be153ed';
         $twilioPhoneNumber = '+16813396798';
 
         // Create a Twilio client instance

@@ -17,7 +17,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[Route('/reclamation')]
 class ReclamationController extends AbstractController
 {
-    #[Route('/dashboardRecl', name: 'app_reclamation_dashboard', methods: ['GET'])]
+
+#[Route('/dashboardRecl', name: 'app_reclamation_dashboard', methods: ['GET'])]
     public function dashboardRec(EntityManagerInterface $entityManager): Response
     {
         // Create a DQL query
@@ -64,13 +65,16 @@ $recCountLivre=$results[0]['recCount'];
    $results = $query->getResult();
    $recCountLivraison=$results[0]['recAutreCount'];
    
+   $chart_data=[$recCountLivraison,$recAutreCount,$recCountLivre];
         return $this->render('reclamation/reclamationDashboard.html.twig', [
             'recCountLivre' => $recCountLivre,
             'recAutreCount' => $recAutreCount,
             'recCountLivraison' => $recCountLivraison,
+            'chart_data' => json_encode($chart_data),
 
         ]);
     }
+
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
