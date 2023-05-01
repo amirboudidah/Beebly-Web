@@ -5,7 +5,7 @@ window.onload = () => {
 
 
 
-    // On boucle sur les input
+
     document.querySelectorAll("#filters input").forEach(input => {
         input.addEventListener("input", () => {
             console.log("yes");
@@ -21,7 +21,7 @@ window.onload = () => {
             });
 
 
-            console.log(Url.pathname + "?" + Params.toString() + "&ajax=1");
+            console.log(Params.toString());
 
             fetch(Url.pathname + "?" + Params.toString() + "&ajax=1", {
                 headers: {

@@ -71,28 +71,67 @@ class PropositionlivreController extends AbstractController
         ]);
     }
     #[Route('/statistique', name: 'show_my_statistique', methods: ['GET'])]
-    public function statistique(EntityManagerInterface $entityManager): Response
+    public function statistique(EntityManagerInterface $entityManager,Request $request): Response
     {
 
 
+        if($request->get('ajax')){
+            $year=intVal(substr($request->get('date'), 0, 4));
+            $month=intVal(substr($request->get('date'), 5, 2));
 
+            $propositionlivresStat = $entityManager
+                ->getRepository(Propositionlivre::class)->getStat($month,$year);
 
+            $dates = [];
+            $dates[] = substr($request->get('date'), 0, 4)."-".substr($request->get('date'), 5, 2)."-01";
+
+            $propositionCount = [];
+
+            foreach($propositionlivresStat as $propositionStat){
+                //dd(end($dates),$propositionStat['dateproposition']->format('Y-m-d'));
+
+                while(!(end($dates) ==$propositionStat['dateproposition']->format('Y-m-d'))){
+
+                    $dates[] = date('Y-m-d', strtotime(end($dates) . ' +1 day'));
+                    $propositionCount[] = 0;
+
+                }
+
+                $propositionCount[] = $propositionStat[1];
+            }
+
+        return new JsonResponse([
+            'content' => $this->renderView('propositionlivre/statistiquePropositionCount.html.twig',
+                compact('propositionCount')),
+            'dates'=>$dates,
+            'propositionCount'=>$propositionCount,
+
+        ]);}
 
         $propositionlivresStat = $entityManager
-            ->getRepository(Propositionlivre::class)->getStat(3,2023);
+            ->getRepository(Propositionlivre::class)->getStat(date('m'),date('Y'));
 
 
         $dates = [];
+        $dates[] = date('Y')."-".date('m')."-01";
+
         $propositionCount = [];
 
         foreach($propositionlivresStat as $propositionStat){
-            $dates[] = $propositionStat['dateproposition']->format('Y-m-d');
+            //dd(end($dates),$propositionStat['dateproposition']->format('Y-m-d'));
+
+            while(!(end($dates) ==$propositionStat['dateproposition']->format('Y-m-d'))){
+
+                $dates[] = date('Y-m-d', strtotime(end($dates) . ' +1 day'));
+                $propositionCount[] = 0;
+
+            }
 
             $propositionCount[] = $propositionStat[1];
         }
         return $this->render('propositionlivre/statistique.html.twig', [
-            'dates' => json_encode($dates),
-            'propositionCount' => json_encode($propositionCount),
+            'app' => ['dates' => $dates,'propositionCount'=>$propositionCount]
+
         ]);
     }
 
