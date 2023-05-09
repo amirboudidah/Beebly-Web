@@ -6,7 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Topic
  *
@@ -21,7 +21,8 @@ class Topic
      * @ORM\Column(name="idtopic", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $idtopic;
 
     /**
@@ -40,7 +41,8 @@ class Topic
      *     match=true,
      *     message="Votre message doit commencer par une lettre majuscule"
      * )
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $titretopic;
 
     /**
@@ -59,7 +61,8 @@ class Topic
      *     match=true,
      *     message="Votre message doit commencer par une lettre majuscule"
      * )
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $description ;
 
     /**
@@ -70,28 +73,32 @@ class Topic
      *      value = "today",
      *      message = "The date should be equal or greater than today"
      * )
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $date ;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="accepter", type="boolean", nullable=false)
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $accepter = '0';
 
     /**
      * @var int
      *
      * @ORM\Column(name="nbsujet", type="integer", nullable=false)
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $nbsujet = '0';
 
     /**
      * @var int
      *
      * @ORM\Column(name="hide", type="integer", nullable=false)
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $hide = '0';
 
     /**
@@ -101,7 +108,8 @@ class Topic
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="iduser", referencedColumnName="id")
      * })
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $iduser;
 
     public function getIdtopic(): ?int

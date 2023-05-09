@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * User
  *
@@ -22,7 +22,8 @@ class User
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $id;
 
     /**
@@ -30,8 +31,8 @@ class User
      *
      * @ORM\Column(name="nom", type="string", length=25, nullable=false)
      * @Assert\NotBlank(message="Remplir ce champ")
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
 
     private $nom;
 
@@ -40,8 +41,8 @@ class User
      *
      * @ORM\Column(name="prenom", type="string", length=25, nullable=false)
      * @Assert\NotBlank
-     * 
-     */
+    *  @Groups({"post:read"})
+    */ 
     private $prenom;
 
     /**
@@ -50,7 +51,8 @@ class User
      * @ORM\Column(name="adrmail", type="string", length=25, nullable=false)
      * @Assert\NotBlank
      * @Assert\Email
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $adrmail;
 
     /**
@@ -58,8 +60,8 @@ class User
      *
      * @ORM\Column(name="mdp", type="string", length=25, nullable=false)
      * @Assert\NotBlank
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $mdp;
 
     /**
@@ -67,8 +69,8 @@ class User
      *
      * @ORM\Column(name="adresse", type="string", length=100, nullable=false)
      * @Assert\NotBlank
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $adresse;
 
     /**
@@ -76,16 +78,16 @@ class User
      *
      * @ORM\Column(name="tel", type="string", length=25, nullable=false)
      * @Assert\NotBlank
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $tel;
 
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=6, nullable=false)
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $type;
 
     /**
@@ -93,16 +95,16 @@ class User
      *
      * @ORM\Column(name="cin", type="integer", nullable=false)
      * @Assert\NotBlank
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $cin;
 
     /**
      * @var int
      *
      * @ORM\Column(name="soldepoint", type="integer", nullable=false)
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $soldepoint;
 
     public function getId(): ?int

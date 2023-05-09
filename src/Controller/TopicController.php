@@ -12,7 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
 #[Route('/topic')]
 class TopicController extends AbstractController
 {
@@ -122,5 +127,104 @@ class TopicController extends AbstractController
         }
 
         return $this->redirectToRoute('app_topic_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/api/topicApi', name: 'topicApi')]
+    public function topicApi(Request $request,NormalizerInterface $normalizer): Response
+    {
+
+        $em = $this->getDoctrine()->getManager()->getRepository(Topic::class); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+
+        $data = $em->findAll(); // Select * from evenements;
+        $jsonContent =$normalizer->normalize($data, 'json' ,['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
+    #[Route('/api/deleteTopic/{id}', name: 'deleteTopic')]
+    public function deleteTopic(Request $request,NormalizerInterface $normalizer,$id): Response
+    {
+
+        $topic = $this->getDoctrine()->getManager()->getRepository(Topic::class)->find($id); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+        $em = $this->getDoctrine()->getManager();
+
+            $em->remove($topic);
+            $em->flush();
+            $jsonContent =$normalizer->normalize($topic, 'json' ,['groups'=>'post:read']);
+            return new Response("information deleted successfully".json_encode($jsonContent));
+    }
+
+    #[Route('/api/addTopic', name: 'addTopic')]
+    public function addTopic(NormalizerInterface $Normalizer,MailerInterface $maileer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+
+        $topic = new Topic();
+
+        $em = $this->getDoctrine()->getManager();
+        $topic->setTitretopic($request->get('titretopic'));
+        
+        $topic->setDescription($request->get('description'));
+        $topic->setDate(new \DateTime());
+        $topic->setHide(0);
+        $topic->setNbsujet(0);
+        $topic->setAccepter(0);
+        
+        $user = $em->getRepository(User::class)->find($request->get('iduser'));
+
+        $transport = Transport::fromDsn("smtp://pidev.beebly@gmail.com:bwukvzhiqbpwyrdc@smtp.gmail.com:587?encryption=tls");
+        $mailer = new Mailer($transport);
+       $emailTo = "emna.bouzouita@gmail.com";
+        $email = (new Email())
+   
+        ->from('pidev.beebly@gmail.com')
+        ->to($emailTo)
+        ->subject('Topic added!')
+        ->text('Sending emails is fun again!')
+        ->html('
+        
+            <h1>A new topic has been added to the application</h1>
+            <p>Dear'. $user->getNom() .',</p>
+          
+            <p>Thank you for your cooperation.</p>
+            <p>Sincerely,<br>Beebly Team</p>
+       ');   
+    
+
+$headers = $email->getHeaders();
+
+$mailer->send($email);
+
+        $topic->setIduser($user);
+        
+        $em->persist($topic);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($topic, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
+    }
+
+    #[Route('/api/editTopicApi/{id}', name: 'editTopicApi')]
+    public function editTopicApi($id,NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+
+     
+        $em = $this->getDoctrine()->getManager();
+        $topic = $em->getRepository(Topic::class)->find($id);
+
+        $topic->setTitretopic($request->get('titretopic'));
+        
+        $topic->setDescription($request->get('description'));
+        $topic->setDate(new \DateTime());
+        $topic->setHide(0);
+        $topic->setNbsujet(0);
+        $topic->setAccepter(0);
+        
+        $user = $em->getRepository(User::class)->find($request->get('iduser'));
+
+        $topic->setIduser($user);
+        
+        $em->persist($topic);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($topic, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
     }
 }

@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Reclamation
  *
@@ -20,7 +20,8 @@ class Reclamation
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $id;
 
     /**
@@ -28,7 +29,8 @@ class Reclamation
      *
      * @ORM\Column(name="type", type="string", length=30, nullable=false)
      * @Assert\NotBlank(message="type cannot be null")
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $type;
 
     /**
@@ -47,7 +49,8 @@ class Reclamation
      *     match=true,
      *     message="Votre message doit commencer par une lettre majuscule"
      * )
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $sujet;
 
     /**
@@ -66,15 +69,16 @@ class Reclamation
      *     match=true,
      *     message="Votre message doit commencer par une lettre majuscule"
      * )
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $description;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="date", type="date", nullable=true)
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $date = '';
 
     /**
@@ -88,8 +92,8 @@ class Reclamation
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=20, nullable=false)
-     * 
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $status;
 
     /**
@@ -99,7 +103,8 @@ class Reclamation
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      * })
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $idUser;
 
     /**
@@ -109,7 +114,8 @@ class Reclamation
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_reponse", referencedColumnName="id")
      * })
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $idReponse;
 
     public function getId(): ?int

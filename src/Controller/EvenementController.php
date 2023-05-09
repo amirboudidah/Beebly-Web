@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\User;
 
 use App\Entity\Evenement;
 use App\Form\EvenementType;
@@ -19,6 +20,8 @@ use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Label\Font\NotoSans;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
 
 #[Route('/evenement')]
 class EvenementController extends AbstractController
@@ -190,5 +193,81 @@ class EvenementController extends AbstractController
         }
 
         return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/api/evenementApi', name: 'evenementApi')]
+    public function evenementApi(Request $request,NormalizerInterface $normalizer): Response
+    {
+
+        $em = $this->getDoctrine()->getManager()->getRepository(Evenement::class); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+
+        $data = $em->findAll(); // Select * from evenements;
+        $jsonContent =$normalizer->normalize($data, 'json' ,['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
+    #[Route('/api/deleteEvenement/{id}', name: 'deleteEvenement')]
+    public function deleteEvenement(Request $request,NormalizerInterface $normalizer,$id): Response
+    {
+
+        $event = $this->getDoctrine()->getManager()->getRepository(Evenement::class)->find($id); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+        $em = $this->getDoctrine()->getManager();
+
+            $em->remove($event);
+            $em->flush();
+            $jsonContent =$normalizer->normalize($event, 'json' ,['groups'=>'post:read']);
+            return new Response("information deleted successfully".json_encode($jsonContent));
+    }
+
+    #[Route('/api/addEvenement', name: 'addEvenement')]
+    public function addEvenement(NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+
+        $event = new Evenement();
+
+        $em = $this->getDoctrine()->getManager();
+        $event->setLibelle($request->get('libelle'));
+        $event->setDescription($request->get('description'));
+        $event->setNbPlace($request->get('nbPlaces'));
+        $event->setEmplacement($request->get('emplacement'));
+        $event->setDate("2023-28-04");
+        $event->setImage("test");
+        $event->setDuree($request->get('duree'));
+        $user = $em->getRepository(User::class)->find($request->get('idUser'));
+
+        $event->setIdUser($user);
+        
+        $em->persist($event);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($event, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
+    }
+
+    #[Route('/api/editEvenementApi/{id}', name: 'editEvenementApi')]
+    public function editEvenementApi($id,NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $event = $em->getRepository(Evenement::class)->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $event->setLibelle($request->get('libelle'));
+        $event->setDescription($request->get('description'));
+        $event->setNbPlace($request->get('nbPlaces'));
+        $event->setEmplacement($request->get('emplacement'));
+        $event->setDate("2023-28-04");
+        $event->setImage("test");
+        $event->setDuree($request->get('duree'));
+        $user = $em->getRepository(User::class)->find($request->get('idUser'));
+
+        $event->setIdUser($user);
+        
+        $em->persist($event);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($event, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
     }
 }

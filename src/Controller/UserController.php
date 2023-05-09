@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -260,5 +261,117 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+    }
+/*Mobile */
+    #[Route('/api/usersApi', name: 'usersApi')]
+    public function usersApi(Request $request,NormalizerInterface $normalizer): Response
+    {
+
+        $em = $this->getDoctrine()->getManager()->getRepository(User::class); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+
+        $users = $em->findAll(); // Select * from users;
+        $jsonContent =$normalizer->normalize($users, 'json' ,['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
+    #[Route('/api/signinMobile', name: 'siginMobile')]
+    public function siginMobile(NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $adrmail=$request->get('email');
+        
+        $password=$request->get('password');
+        $user = $entityManager->getRepository(User::class)->findBy(['adrmail'=>$adrmail,'mdp'=>$password]);
+        if ($user){
+
+     
+            $jsonContent = $Normalizer->normalize($user, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+        }else{
+            return new Response("failed");
+
+        };
+       
+
+    }
+
+    #[Route('/api/updateProfileMobile/{id}', name: 'updateProfileMobile')]
+    public function updateProfileMobile($id,NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository(User::class)->find($id);
+
+        $user->setNom($request->get('nom'));
+        $user->setPrenom($request->get('prenom'));
+        $user->setAdrmail($request->get('adrmail'));
+        $user->setMdp($request->get('mdp'));
+        $user->setAdresse($request->get('adresse'));
+        $user->setTel($request->get('tel'));
+        $user->setCin($request->get('cin'));
+
+        $em->persist($user);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($user, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
+    }
+
+    #[Route('/api/signUpMobile', name: 'signUpMobile')]
+    public function signUpMobile(NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+$user = new User();
+        $user->setNom($request->get('nom'));
+        $user->setPrenom($request->get('prenom'));
+        $user->setAdrmail($request->get('adrmail'));
+        $user->setMdp($request->get('mdp'));
+        $user->setAdresse($request->get('adresse'));
+        $user->setTel($request->get('tel'));
+        $user->setCin($request->get('cin'));
+        $user->setType("client");
+        $user->setSoldepoint(0);
+        $em->persist($user);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($user, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
+    }
+
+    #[Route('/api/addAdminMobile', name: 'addAdminMobile')]
+    public function addAdminMobile(NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+$user = new User();
+        $user->setNom($request->get('nom'));
+        $user->setPrenom($request->get('prenom'));
+        $user->setAdrmail($request->get('adrmail'));
+        $user->setMdp($request->get('mdp'));
+        $user->setAdresse($request->get('adresse'));
+        $user->setTel($request->get('tel'));
+        $user->setCin($request->get('cin'));
+        $user->setType("admin");
+        $user->setSoldepoint(0);
+        $em->persist($user);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($user, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
+    }
+
+    #[Route('/api/deleteUserMobile/{id}', name: 'deleteUserMobile')]
+    public function deleteUserMobile(Request $request,NormalizerInterface $normalizer,$id): Response
+    {
+
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->find($id); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+        $em = $this->getDoctrine()->getManager();
+
+            $em->remove($user);
+            $em->flush();
+            $jsonContent =$normalizer->normalize($user, 'json' ,['groups'=>'post:read']);
+            return new Response("information deleted successfully".json_encode($jsonContent));
     }
 }

@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Twilio\Rest\Client;
 #[Route('/reclamation')]
 class ReclamationController extends AbstractController
 {
-
-#[Route('/dashboardRecl', name: 'app_reclamation_dashboard', methods: ['GET'])]
+    #[Route('/dashboardRecl', name: 'app_reclamation_dashboard', methods: ['GET'])]
     public function dashboardRec(EntityManagerInterface $entityManager): Response
     {
         // Create a DQL query
@@ -64,8 +64,7 @@ $recCountLivre=$results[0]['recCount'];
    // Get the results
    $results = $query->getResult();
    $recCountLivraison=$results[0]['recAutreCount'];
-   
-   $chart_data=[$recCountLivraison,$recAutreCount,$recCountLivre];
+   $chart_data=[$recAutreCount,$recCountLivraison,$recCountLivre];
         return $this->render('reclamation/reclamationDashboard.html.twig', [
             'recCountLivre' => $recCountLivre,
             'recAutreCount' => $recAutreCount,
@@ -74,7 +73,6 @@ $recCountLivre=$results[0]['recCount'];
 
         ]);
     }
-
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -188,4 +186,94 @@ $recCountLivre=$results[0]['recCount'];
 
         return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/api/reclamationApi', name: 'reclamationApi')]
+    public function reclamationApi(Request $request,NormalizerInterface $normalizer): Response
+    {
+
+        $em = $this->getDoctrine()->getManager()->getRepository(Reclamation::class); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+
+        $data = $em->findAll(); // Select * from reclamations;
+        $jsonContent =$normalizer->normalize($data, 'json' ,['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+    #[Route('/api/deleteReclamation/{id}', name: 'deleteReclamation')]
+    public function deleteReclamation(Request $request,NormalizerInterface $normalizer,$id): Response
+    {
+
+        $reclamation = $this->getDoctrine()->getManager()->getRepository(Reclamation::class)->find($id); // ENTITY MANAGER ELY FIH FONCTIONS PREDIFINES
+        $em = $this->getDoctrine()->getManager();
+
+            $em->remove($reclamation);
+            $em->flush();
+            $jsonContent =$normalizer->normalize($reclamation, 'json' ,['groups'=>'post:read']);
+            return new Response("information deleted successfully".json_encode($jsonContent));
+    }
+    #[Route('/api/addReclamation', name: 'addReclamation')]
+    public function addReclamation(NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+
+        $reclamation = new Reclamation();
+
+        $em = $this->getDoctrine()->getManager();
+        $reclamation->setType($request->get('type'));
+        $reclamation->setSujet($request->get('sujet'));
+        $reclamation->setDescription($request->get('description'));
+        $reclamation->setDate(new \DateTime());
+        $reclamation->setPhoto("");
+        $reclamation->setStatus($request->get('status'));
+        $user = $em->getRepository(User::class)->find($request->get('idUser'));
+
+        $reclamation->setIdUser($user);
+        // Replace with your Twilio account SID, auth token, and Twilio phone number
+        $twilioAccountSid = 'ACd476e6133d3fa563ae799674f3a7008b';
+        $twilioAuthToken = 'bb9200db08f397ce844cc0610b3a02e9';
+        $twilioPhoneNumber = '+16813396798';
+
+        // Create a Twilio client instance
+        $twilioClient = new Client($twilioAccountSid, $twilioAuthToken);
+
+
+        $phoneNumber="+21650730142";
+        // Send SMS using Twilio
+        $message = $twilioClient->messages->create(
+            $phoneNumber, // recipient's phone number
+            [
+                'from' => $twilioPhoneNumber, // your Twilio phone number
+                'body' => 'a new reclamation added please check it'// SMS body
+            ]
+        );
+        $em->persist($reclamation);
+        $em->flush();
+            $jsonContent = $Normalizer->normalize($reclamation, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
+    }
+
+    #[Route('/api/editReclamationApi/{id}', name: 'editReclamationApi')]
+    public function editReclamationApi($id,NormalizerInterface $Normalizer,Request $request,EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $reclamation = $em->getRepository(Reclamation::class)->find($id);
+
+       
+        $reclamation->setType($request->get('type'));
+        $reclamation->setSujet($request->get('sujet'));
+        $reclamation->setDescription($request->get('description'));
+        
+        $reclamation->setPhoto("");
+        $reclamation->setStatus($request->get('status'));
+        $user = $em->getRepository(User::class)->find($request->get('idUser'));
+
+        $reclamation->setIdUser($user);
+        
+        $em->persist($reclamation);
+        $em->flush();
+        
+            $jsonContent = $Normalizer->normalize($reclamation, 'json',['groups'=>'post:read']);
+            return new Response(json_encode($jsonContent));
+
+    }
+
 }

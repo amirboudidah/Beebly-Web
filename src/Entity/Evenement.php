@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Evenement
  *
@@ -18,7 +19,8 @@ class Evenement
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $id;
 
     /**
@@ -37,21 +39,24 @@ class Evenement
      *     match=true,
      *     message="Votre message doit commencer par une lettre majuscule"
      * )
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $libelle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="image", type="string", length=255, nullable=false)
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $image;
 
     /**
      * @var string
      *
      * @ORM\Column(name="date", type="string", length=255, nullable=false)
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $date;
 
     /**
@@ -70,7 +75,8 @@ class Evenement
      *     match=true,
      *     message="Votre message doit commencer par une lettre majuscule"
      * )
-     */
+    *  @Groups({"post:read"})
+    */ 
     private $description;
 
     /**
@@ -89,7 +95,8 @@ class Evenement
      *     match=true,
      *     message="Votre message doit commencer par une lettre majuscule"
      * )
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $emplacement;
 
     /**
@@ -97,7 +104,8 @@ class Evenement
      *
      * @ORM\Column(name="nb_place", type="integer", nullable=false)
      * @Assert\NotBlank(message="Remplir ce champ")
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $nbPlace;
 
     /**
@@ -105,7 +113,8 @@ class Evenement
      *
      * @ORM\Column(name="duree", type="integer", nullable=false)
      * @Assert\NotBlank(message="Remplir ce champ")
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $duree;
 
     /**
@@ -115,7 +124,8 @@ class Evenement
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      * })
-     */
+     *  @Groups({"post:read"})
+    */ 
     private $idUser;
 
     public function getId(): ?int

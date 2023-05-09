@@ -62,20 +62,49 @@ class CommentaireController extends AbstractController
     #[Route('/commentLike/{idcom}', name: 'commentLike', methods: ['GET'])]
     public function commentLike(Commentaire $commentaire,SessionInterface $session, EntityManagerInterface $entityManager): Response
     {
+        
         $id =$session->get('id');
         if ($id!= null){
             $user = $entityManager
             ->getRepository(User::class)
             ->find($id);
-        $like = new Likee();
-        $like->setIdCommentaire($commentaire);
-        $like->setIduser($user);
-        $entityManager->persist($like);
+            // Find dislikee by user and comment
+    $dislikee = $entityManager
+    ->getRepository(Dislikee::class)
+    ->findOneBy(['idUser' => $user, 'idCommentaire' => $commentaire]);
+
+// Find likee by user and comment
+$likee = $entityManager
+    ->getRepository(Likee::class)
+    ->findOneBy(['idUser' => $user, 'idCommentaire' => $commentaire]);
+
+if ($likee === null) {
+    if ($dislikee !== null) {
+       
+             // Update comment nblike
+     $commentaire->setNbDislike($commentaire->getNbDislike() -1);
+     $entityManager->persist($commentaire);
+     $entityManager->flush();
+
+        // Remove existing dislikee
+        $entityManager->remove($dislikee);
         $entityManager->flush();
-        $commentaire->setNblike($commentaire->getNblike()+1);
-        $entityManager->persist($commentaire);
-        $entityManager->flush();
-            
+    }
+     // Create new likee
+     $like = new Likee();
+     $like->setIdCommentaire($commentaire);
+     $like->setIduser($user);
+     $entityManager->persist($like);
+     $entityManager->flush();
+
+     // Update comment nblike
+     $commentaire->setNblike($commentaire->getNblike() + 1);
+     $entityManager->persist($commentaire);
+     $entityManager->flush();
+
+        }
+       
+       
             return $this->redirectToRoute('topicFront', [], Response::HTTP_SEE_OTHER);
 
     }else{
@@ -91,14 +120,40 @@ class CommentaireController extends AbstractController
             $user = $entityManager
             ->getRepository(User::class)
             ->find($id);
-        $dislike = new Dislikee();
-        $dislike->setIdCommentaire($commentaire);
-        $dislike->setIduser($user);
-        $entityManager->persist($dislike);
+      
+        // Find likee by user and comment
+        $likee = $entityManager
+            ->getRepository(Likee::class)
+            ->findOneBy(['idUser' => $user, 'idCommentaire' => $commentaire]);
+
+        // Find dislikee by user and comment
+        $dislikee = $entityManager
+            ->getRepository(Dislikee::class)
+            ->findOneBy(['idUser' => $user, 'idCommentaire' => $commentaire]);
+
+        if ($dislikee === null) {
+            if ($likee !== null) {
+                // Update comment nblike
+                $commentaire->setNblike($commentaire->getNblike() - 1);
+                $entityManager->persist($commentaire);
+                $entityManager->flush();
+
+                // Remove existing likee
+                $entityManager->remove($likee);
+                $entityManager->flush();
+            }
+            // Create new dislikee
+            $dislike = new Dislikee();
+            $dislike->setIdCommentaire($commentaire);
+            $dislike->setIduser($user);
+            $entityManager->persist($dislike);
             $entityManager->flush();
-            $commentaire->setNbdislike($commentaire->getNbdislike()+1);
-        $entityManager->persist($commentaire);
-        $entityManager->flush();
+
+            // Update comment nbdislike
+            $commentaire->setNbdislike($commentaire->getNbdislike() + 1);
+            $entityManager->persist($commentaire);
+            $entityManager->flush();
+        }
             return $this->redirectToRoute('topicFront', [], Response::HTTP_SEE_OTHER);
 
     }else{
